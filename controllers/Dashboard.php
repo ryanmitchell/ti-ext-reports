@@ -85,9 +85,6 @@ class Dashboard extends \Admin\Classes\AdminController
 		    'top_items' => 0
 	    ];
 	    
-	    var_dump($startDate->format('Y-m-d'));
-	    var_dump($endDate->format('Y-m-d'));
-	    
 	    // get total sales
 	    $results['total_sales'] = currency_format(Orders_model::where([
 		    ['order_date', '>=', $startDate->format('Y-m-d')],
