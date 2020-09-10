@@ -1,0 +1,13 @@
+{
+  "code": "thoughtco.reports",
+  "name": "Reports",
+  "description": "Provides reporting on you restaurant, such as daily sales, quantity of items sold, top customers, top items.",
+  "version": "v1.0.0",
+  "author": "ryanmitchell",
+  "icon": {
+    "class": "fa fa-thermometer-three-quarters",
+    "backgroundColor": "#111",
+    "color": "#FFF"
+  },
+  "homepage": "https://github.com/thoughtco/ti-ext-reports"
+}
