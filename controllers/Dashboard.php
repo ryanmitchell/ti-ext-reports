@@ -32,7 +32,11 @@ class Dashboard extends \Admin\Classes\AdminController
     
     public function index()
     {
-	    	    
+		$this->addJs('/app/system/assets/ui/js/vendor/moment.min.js', 'moment-js');
+		$this->addCss('/app/admin/formwidgets/datepicker/assets/vendor/datepicker/bootstrap-datepicker.min.css', 'bootstrap-datepicker-css');
+		$this->addJs('/app/admin/formwidgets/datepicker/assets/vendor/datepicker/bootstrap-datepicker.min.js', 'bootstrap-datepicker-js');
+		$this->addCss('/app/admin/formwidgets/datepicker/assets/css/datepicker.css', 'datepicker-css');
+		$this->addJs('/app/admin/formwidgets/datepicker/assets/js/datepicker.js', 'datepicker-js');	    	    
 	}
 	
 	public function getParams(){
