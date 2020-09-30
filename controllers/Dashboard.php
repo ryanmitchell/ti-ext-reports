@@ -64,7 +64,6 @@ class Dashboard extends \Admin\Classes\AdminController
 
 	public function getLocations()
     {
-    
     	if ($this->locationNames) return $this->locationNames;
     
     	$locationNames = [];
@@ -88,7 +87,6 @@ class Dashboard extends \Admin\Classes\AdminController
 		$this->locations = collect($locations);
 		    	
     	return $locationNames;        
-        
     }
         
     public function getResults()
@@ -129,7 +127,7 @@ class Dashboard extends \Admin\Classes\AdminController
 		
 		// pickup order stats
 		$pickupOrders = $orders->filter(function($order) {
-			return $order->order_type == 'pickup';
+			return $order->order_type == 'collection';
 		});
 		
 		$results['pickup_orders'] = (object)[
