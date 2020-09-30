@@ -1,10 +1,5 @@
-@php 
-	[$locationParam, $startDate, $endDate] = $this->getParams();
-	$results = $this->getResults();
-@endphp
-
 	<div class="row-fluid">
-		
+			
     @if (sizeof($this->getLocations()) > 1)
 					
 	<div class="list-filter" id="filter-list-filter">
