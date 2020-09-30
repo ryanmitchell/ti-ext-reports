@@ -93,6 +93,7 @@ class Dashboard extends \Admin\Classes\AdminController
 		    'total_sales' => 0,
 		    'total_orders' => 0,
 		    'quantity_of_items' => 0,
+			'cancelled_orders' => ['value' => 0, 'count' => 0],
 			'delivery_orders' => ['value' => 0, 'count' => 0],
 			'pickup_orders' => ['value' => 0, 'count' => 0],
 			'top_customers' => [],
@@ -139,6 +140,16 @@ class Dashboard extends \Admin\Classes\AdminController
 			'value' => $deliveryOrders->sum('order_total'),
 			'count' => $deliveryOrders->count(),
 		];		
+		
+		// cancelled order stats
+		$cancelledOrders = $orders->filter(function($order) {
+			return $order->status_id == setting('canceled_order_status');
+		});
+				
+		$results['cancelled_orders'] = (object)[
+			'value' => $cancelledOrders->sum('order_total'),
+			'count' => $cancelledOrders->count(),
+		];	
 		
 		// orders by customer
 		$ordersByCustomer = $orders->groupBy('email');
