@@ -93,6 +93,8 @@ class Dashboard extends \Admin\Classes\AdminController
 		    'total_sales' => 0,
 		    'total_orders' => 0,
 		    'quantity_of_items' => 0,
+			'delivery_orders' => ['value' => 0, 'count' => 0],
+			'pickup_orders' => ['value' => 0, 'count' => 0],
 			'top_customers' => [],
 			'bottom_customers' => [],
 			'order_items' => [],
@@ -117,6 +119,26 @@ class Dashboard extends \Admin\Classes\AdminController
 	    
 	    // get total orders
 	    $results['total_orders'] = $orders->count();
+		
+		// pickup order stats
+		$pickupOrders = $orders->filter(function($order) {
+			return $order->order_type == 'pickup';
+		});
+		
+		$results['pickup_orders'] = (object)[
+			'value' => $pickupOrders->sum('order_total'),
+			'count' => $pickupOrders->count(),
+		];
+		
+		// delivery order stats
+		$deliveryOrders = $orders->filter(function($order) {
+			return $order->order_type == 'delivery';
+		});
+				
+		$results['delivery_orders'] = (object)[
+			'value' => $deliveryOrders->sum('order_total'),
+			'count' => $deliveryOrders->count(),
+		];		
 		
 		// orders by customer
 		$ordersByCustomer = $orders->groupBy('email');

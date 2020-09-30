@@ -113,6 +113,30 @@
 								 
 	</div>
 	
+	<div class="row mx-1 mt-2">
+					
+		<div class="col col-sm-6">
+			<div class="card bg-light p-3 shadow-sm">
+				<div class="card-counter sale">
+					<i class="stat-icon  bg-success text-white fa fa-line-chart"></i>
+					<span class="stat-number">{{ currency_format($results->pickup_orders->value) }}</span>
+					<span class="stat-text">Pickup orders</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="col col-sm-6">
+			<div class="card bg-light p-3 shadow-sm">
+				<div class="card-counter sale">
+					<i class="stat-icon  bg-success text-white fa fa-line-chart"></i>
+					<span class="stat-number">{{ currency_format($results->delivery_orders->value) }}</span>
+					<span class="stat-text">Delivery orders</span>
+				</div>
+			</div>
+		</div>
+								 
+	</div>
+	
 	<div class="row mx-1 mt-4">
 		
 		<div class="col col-sm-6">
