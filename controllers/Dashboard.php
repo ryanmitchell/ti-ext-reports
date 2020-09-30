@@ -88,57 +88,66 @@ class Dashboard extends \Admin\Classes\AdminController
 		    'top_customers' => 0,
 		    'top_items' => 0
 	    ];
-	    
+		
+		// get order ids for the time period
+		$orders = Orders_model::where([
+			['order_date', '>=', $startDate->format('Y-m-d')],
+			['order_date', '<=', $endDate->format('Y-m-d')],
+		])
+		->whereIn('status_id', setting('completed_order_status'))
+		->get();
+		
 	    // get total sales
-	    $results['total_sales'] = currency_format(Orders_model::where([
-		    ['order_date', '>=', $startDate->format('Y-m-d')],
-		    ['order_date', '<=', $endDate->format('Y-m-d')],
-	    ])
-	    ->whereIn('status_id', setting('completed_order_status'))
-	    ->sum('order_total'));
+	    $results['total_sales'] = currency_format($orders->sum('order_total'));
 	    
 	    // get total orders
-	    $results['total_orders'] = Orders_model::where([
-		    ['order_date', '>=', $startDate->format('Y-m-d')],
-		    ['order_date', '<=', $endDate->format('Y-m-d')],
-	    ])
-	    ->whereIn('status_id', setting('completed_order_status'))
-	    ->count();
+	    $results['total_orders'] = $orders->count();
+		
+		// orders by customer
+		$ordersByCustomer = $orders->groupBy('email');
+		
+		// get top customers
+		$results['top_customers'] = $ordersByCustomer
+		->map(function($ordersByCustomer, $key) {
+			
+			if (!$first = $ordersByCustomer->first())
+				return false;			
+			
+			return (object)[
+				'name' => $first->first_name.' '.$first->first()->last_name,
+				'email' => $first->first()->email,
+				'value' => $ordersByCustomer->sum('order_total'),
+			];
+		})
+		->sortByDesc('value')
+		->slice(0, 10); 		
+				
+		// get ids
+		$orderIds = $orders->pluck('order_id');
 	    
-	    // get top customers
-	    $results['top_customers'] = DB::table('orders')
-	    ->where([
-		    ['order_date', '>=', $startDate->format('Y-m-d')],
-		    ['order_date', '<=', $endDate->format('Y-m-d')],
-	    ])
-	    ->select(DB::raw('sum(order_total) as value, order_id, concat(first_name, " ", last_name) as name'))
-	    ->whereIn('status_id', setting('completed_order_status'))
-	    ->groupBy('email')
-	    ->orderBy('value', 'desc')
-	    ->limit(10)	    
-	    ->get();	 
-	    	    
-	    // get order ids for the time period
-	    $orderIds = Orders_model::where([
-		    ['order_date', '>=', $startDate->format('Y-m-d')],
-		    ['order_date', '<=', $endDate->format('Y-m-d')],
-	    ])
-	    ->whereIn('status_id', setting('completed_order_status'))
-	    ->pluck('order_id');
-	    
-	    // get quantity of items
-	    $results['quantity_of_items'] = DB::table('order_menus')
+		// get order items
+	    $orderItems = DB::table('order_menus')
 	    ->whereIn('order_id', $orderIds)
-	    ->count();
-	    	    
-	    // get quantity of items
-	    $results['top_items'] = DB::table('order_menus')
-	    ->select(DB::raw('sum(quantity) as quantity, menu_id, name'))
-	    ->whereIn('order_id', $orderIds)
-	    ->groupBy('menu_id')
-	    ->orderBy('quantity', 'desc')
-	    ->limit(10)
 	    ->get();
+		
+		// get quantity of items
+		$results['quantity_of_items'] = $orderItems->count();
+	    	    
+	    // get quantity of items
+		$results['top_items'] = $orderItems
+		->groupBy('menu_id')
+		->map(function($orderItems, $key){
+			if (!$first = $orderItems->first())
+				return false;
+			
+			return (object)[
+				'quantity' => $orderItems->sum('quantity'),
+				'menu_id' => $key,
+				'name' => $first->name,
+			];
+		})
+		->sortByDesc('quantity')
+		->slice(0, 10);
 	    	    	    	    	    
 	    return (object)$results;
     }

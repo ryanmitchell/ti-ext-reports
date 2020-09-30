@@ -132,7 +132,7 @@
 				<div class="card-title">Top Customers</div>
 				<div class="card-body">
 				<?php foreach ($results->top_customers as $item){ ?>
-					<dd><?= $item->name ?> (<?= $item->value ?>)</dd>
+					<dd><?= $item->name ?> (<?= currency_format($item->value) ?>)</dd>
 				<?php } ?>
 				</div>
 			</div>
