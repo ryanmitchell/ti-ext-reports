@@ -22,6 +22,9 @@ class Dashboard extends \Admin\Classes\AdminController
 {
 
     protected $requiredPermissions = 'Thoughtco.Reports.*';
+	
+	private $locations;
+	private $locationNames;
 
     public function __construct()
     {
@@ -62,26 +65,29 @@ class Dashboard extends \Admin\Classes\AdminController
 	public function getLocations()
     {
     
-    	if ($this->locations) return $this->locations;
+    	if ($this->locationNames) return $this->locationNames;
     
-    	$locations = []; 
-    	
-    	foreach (Locations_model::get() as $l){
+    	$locationNames = [];
+		$locations = [];
+		    	
+    	foreach (Locations_model::all() as $l){
      
 			if (AdminLocation::getId() === NULL || AdminLocation::getId() == $l->location_id){
 				
 				if ($l->location_status){
 				
-					$locations[$l->location_id] = $l->location_name;
+					$locationNames[$l->location_id] = $l->location_name;
+					$locations[] = $l;
 				
 				}
 			}
     	
     	}
-    	
-    	$this->locations = $locations;
-    	
-    	return $locations;        
+		    	
+    	$this->locationNames = $locationNames;
+		$this->locations = collect($locations);
+		    	
+    	return $locationNames;        
         
     }
         
@@ -280,6 +286,34 @@ class Dashboard extends \Admin\Classes\AdminController
 				'count' => $ordersInThisCategory->count(),
 			];
 			
+		});
+		
+		// get payment methods for this location
+		$paymentMethods = $this->locations->get($locationParam)
+		->listAvailablePayments()
+		->map(function($method) {
+			return (object)[
+				'name' => $method->name,
+				'code' => $method->code,
+			];		
+		});
+		
+		// get orders by payment method
+		$results['orders_by_payment_method'] = $paymentMethods
+		->map(function($method) use ($orders){
+		
+			$ordersUsingThisMethod = $orders
+			->filter(function($orderItem) use ($method){
+				if ($orderItem->payment == $method->code) 
+					return true;
+				return false;
+			});
+											
+			$method->value = $ordersUsingThisMethod->sum('order_total');
+			$method->count = $ordersUsingThisMethod->count();
+			
+			return $method;
+		
 		});
 					    	    	    	    	    
 	    return (object)$results;

@@ -209,7 +209,7 @@
 	
 	<div class="row mx-1 mt-4">
 				
-		<div class="col col-sm-4">
+		<div class="col col-sm-3">
 			<div class="card bg-light p-3 shadow-sm">
 			<div class="card-title">
 				<h1 class="h4">Orders by day</h1>
@@ -222,7 +222,7 @@
 			</div>
 		</div>
 
-		<div class="col col-sm-4">
+		<div class="col col-sm-3">
 			<div class="card bg-light p-3 shadow-sm">
 				<div class="card-title">
 					<h1 class="h4">Orders by hour</h1>
@@ -235,7 +235,7 @@
 			</div>
 		</div>
 
-		<div class="col col-sm-4">
+		<div class="col col-sm-3">
 			<div class="card bg-light p-3 shadow-sm">
 				<div class="card-title">
 					<h1 class="h4">Orders by category</h1>
@@ -247,7 +247,20 @@
 				</div>
 			</div>
 		</div>
-		
+
+		<div class="col col-sm-3">
+			<div class="card bg-light p-3 shadow-sm">
+				<div class="card-title">
+					<h1 class="h4">Orders by payment type</h1>
+				</div>
+				<div class="card-body">
+				@foreach ($results->orders_by_payment_method as $key=>$item)
+					<dd>{{ $item->name }} {{ currency_format($item->value) }} / {{ $item->count }}</dd>
+				@endforeach
+				</div>
+			</div>
+		</div>
+				
 	</div>
 		    	    
 </div>
