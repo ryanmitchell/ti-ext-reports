@@ -137,6 +137,21 @@
 				</div>
 			</div>
 		</div>
+		
+		<div class="col col-sm-6">
+			<div class="card bg-light p-3 shadow-sm">
+				<div class="card-title">Bottom Customers</div>
+				<div class="card-body">
+				<?php foreach ($results->bottom_customers as $item){ ?>
+					<dd><?= $item->name ?> (<?= currency_format($item->value) ?>)</dd>
+				<?php } ?>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
+	<div class="row mx-1 mt-4">
 
 		<div class="col col-sm-6">
 			<div class="card bg-light p-3 shadow-sm">
@@ -144,6 +159,54 @@
 				<div class="card-body">
 				<?php foreach ($results->top_items as $item){ ?>
 					<dd><?= $item->name ?> (<?= $item->quantity ?>)</dd>
+				<?php } ?>
+				</div>
+			</div>
+		</div>
+		
+		<div class="col col-sm-6">
+			<div class="card bg-light p-3 shadow-sm">
+				<div class="card-title">Bottom Items</div>
+				<div class="card-body">
+				<?php foreach ($results->bottom_items as $item){ ?>
+					<dd><?= $item->name ?> (<?= $item->quantity ?>)</dd>
+				<?php } ?>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
+	<div class="row mx-1 mt-4">
+				
+		<div class="col col-sm-4">
+			<div class="card bg-light p-3 shadow-sm">
+				<div class="card-title">Orders by day</div>
+				<div class="card-body">
+				<?php foreach ($results->orders_by_day as $key=>$item){ ?>
+					<dd><?= date('l', strtotime("Sunday + $key Days")); ?> <?= currency_format($item->value) ?> / <?= $item->count ?> </dd>
+				<?php } ?>
+				</div>
+			</div>
+		</div>
+
+		<div class="col col-sm-4">
+			<div class="card bg-light p-3 shadow-sm">
+				<div class="card-title">Orders by hour</div>
+				<div class="card-body">
+				<?php foreach ($results->orders_by_hour as $key=>$item){ ?>
+					<dd><?= str_pad($key, 2, '0', STR_PAD_LEFT).':00 - '.str_pad($key+1, 2, '0', STR_PAD_LEFT).':00' ?> <?= currency_format($item->value) ?> / <?= $item->count ?> </dd>
+				<?php } ?>
+				</div>
+			</div>
+		</div>
+
+		<div class="col col-sm-4">
+			<div class="card bg-light p-3 shadow-sm">
+				<div class="card-title">Orders by category</div>
+				<div class="card-body">
+				<?php foreach ($results->orders_by_category as $key=>$item){ ?>
+					<dd><?= $item->name ?> <?= currency_format($item->value) ?> / <?= $item->count ?> </dd>
 				<?php } ?>
 				</div>
 			</div>
