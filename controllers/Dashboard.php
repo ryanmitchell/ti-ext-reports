@@ -47,10 +47,11 @@ class Dashboard extends \Admin\Classes\AdminController
 		$this->vars['locationParam'] = $locationParam;
 		$this->vars['startDate'] = $startDate;
 		$this->vars['endDate'] = $endDate;
-		$this->vars['results'] = $this->getResults();
+		$this->vars['results'] = $this->buildDashboard();
 	}
 	
-	public function getParams(){
+	public function getParams()
+	{
 		
 	    $locations = $this->getLocations();
 	    	   
@@ -64,23 +65,22 @@ class Dashboard extends \Admin\Classes\AdminController
 
 	public function getLocations()
     {
-    	if ($this->locationNames) return $this->locationNames;
+    	if ($this->locationNames) 
+			return $this->locationNames;
     
     	$locationNames = [];
 		$locations = [];
 		    	
-    	foreach (Locations_model::all() as $l){
-     
-			if (AdminLocation::getId() === NULL || AdminLocation::getId() == $l->location_id){
-				
-				if ($l->location_status){
-				
+    	foreach (Locations_model::all() as $l)
+		{
+			if (AdminLocation::getId() === NULL || AdminLocation::getId() == $l->location_id)
+			{
+				if ($l->location_status)
+				{
 					$locationNames[$l->location_id] = $l->location_name;
 					$locations[] = $l;
-				
 				}
 			}
-    	
     	}
 		    	
     	$this->locationNames = $locationNames;
@@ -89,7 +89,7 @@ class Dashboard extends \Admin\Classes\AdminController
     	return $locationNames;        
     }
         
-    public function getResults()
+    public function buildDashboard()
     {
 	    [$locationParam, $startDate, $endDate] = $this->getParams();
 	    
@@ -184,7 +184,7 @@ class Dashboard extends \Admin\Classes\AdminController
 		$results['orders_by_day'] = collect([0, 1, 2, 3, 4, 5, 6])
 		->map(function($dayOfWeek) use($orders) {
 			
-			$ordersOnDay = $orders->filter(function($order) use($dayOfWeek){
+			$ordersOnDay = $orders->filter(function($order) use($dayOfWeek) {
 				return $order->order_date->dayOfWeek == $dayOfWeek;
 			});
 			
@@ -225,7 +225,7 @@ class Dashboard extends \Admin\Classes\AdminController
 	    // get all order items
 		$results['order_items'] = $orderItems = $orderItems
 		->groupBy('menu_id')
-		->map(function($orderItems, $key){
+		->map(function($orderItems, $key) {
 			if (!$first = $orderItems->first())
 				return false;
 			
@@ -269,11 +269,11 @@ class Dashboard extends \Admin\Classes\AdminController
 		->map(function($category, $categoryKey) use ($orderItems, $menusCategories){
 			
 			$ordersInThisCategory = $orderItems
-			->filter(function($orderItem) use ($categoryKey, $menusCategories){
-				if ($categoryList = $menusCategories->get($orderItem->menu_id)) {
-					if (in_array($categoryKey, $categoryList->categories)) {
+			->filter(function($orderItem) use ($categoryKey, $menusCategories) {
+				if ($categoryList = $menusCategories->get($orderItem->menu_id))
+				{
+					if (in_array($categoryKey, $categoryList->categories))
 						return true;
-					}
 				}
 				return false;
 			});
