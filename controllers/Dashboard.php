@@ -42,6 +42,7 @@ class Dashboard extends \Admin\Classes\AdminController
 		$this->addJs('/app/admin/formwidgets/datepicker/assets/vendor/datepicker/bootstrap-datepicker.min.js', 'bootstrap-datepicker-js');
 		$this->addCss('/app/admin/formwidgets/datepicker/assets/css/datepicker.css', 'datepicker-css');
 		$this->addJs('/app/admin/formwidgets/datepicker/assets/js/datepicker.js', 'datepicker-js');
+        $this->addCss('/app/admin/dashboardwidgets/statistics/assets/css/statistics.css', 'statistics-css');
 
 		[$locationParam, $startDate, $endDate] = $this->getParams();
 		$this->vars['locationParam'] = $locationParam;

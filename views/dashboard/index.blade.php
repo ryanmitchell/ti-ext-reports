@@ -84,7 +84,7 @@
 		<div class="col col-sm-4">
 			<div class="card bg-light p-3 shadow-sm">
 				<div class="card-counter sale">
-					<i class="stat-icon  bg-success text-white fa fa-line-chart"></i>
+					<i class="stat-icon  bg-green text-white fa fa-money-bill"></i>
 					<span class="stat-number">{{ $results->total_sales }}</span>
 					<span class="stat-text">Total Sales</span>
 				</div>
@@ -94,7 +94,7 @@
 		<div class="col col-sm-4">
 			<div class="card bg-light p-3 shadow-sm">
 				<div class="card-counter sale">
-					<i class="stat-icon  bg-success text-white fa fa-line-chart"></i>
+					<i class="stat-icon  bg-blue text-white fa fa-shopping-basket"></i>
 					<span class="stat-number">{{ $results->total_orders }}</span>
 					<span class="stat-text">Total Orders</span>
 				</div>
@@ -104,7 +104,7 @@
 		<div class="col col-sm-4">
 			<div class="card bg-light p-3 shadow-sm">
 				<div class="card-counter sale">
-					<i class="stat-icon  bg-success text-white fa fa-line-chart"></i>
+					<i class="stat-icon  bg-warning text-white fa fa-line-chart"></i>
 					<span class="stat-number">{{ $results->quantity_of_items }}</span>
 					<span class="stat-text">Total Items</span>
 				</div>
@@ -118,9 +118,9 @@
 		<div class="col col-sm-4">
 			<div class="card bg-light p-3 shadow-sm">
 				<div class="card-counter sale">
-					<i class="stat-icon  bg-success text-white fa fa-line-chart"></i>
+					<i class="stat-icon  bg-blue text-white fa fa-store"></i>
 					<span class="stat-number">{{ currency_format($results->pickup_orders->value) }}</span>
-					<span class="stat-text">Pickup orders</span>
+					<span class="stat-text">Pick-up Orders</span>
 				</div>
 			</div>
 		</div>
@@ -128,9 +128,9 @@
 		<div class="col col-sm-4">
 			<div class="card bg-light p-3 shadow-sm">
 				<div class="card-counter sale">
-					<i class="stat-icon  bg-success text-white fa fa-line-chart"></i>
+					<i class="stat-icon  bg-blue text-white fa fa-shipping-fast"></i>
 					<span class="stat-number">{{ currency_format($results->delivery_orders->value) }}</span>
-					<span class="stat-text">Delivery orders</span>
+					<span class="stat-text">Delivery Orders</span>
 				</div>
 			</div>
 		</div>
@@ -138,9 +138,9 @@
 		<div class="col col-sm-4">
 			<div class="card bg-light p-3 shadow-sm">
 				<div class="card-counter sale">
-					<i class="stat-icon  bg-success text-white fa fa-line-chart"></i>
+					<i class="stat-icon  bg-danger text-white fa fa-exclamation-circle"></i>
 					<span class="stat-number">{{ currency_format($results->cancelled_orders->value) }}</span>
-					<span class="stat-text">Cancelled orders</span>
+					<span class="stat-text">Cancelled Orders</span>
 				</div>
 			</div>
 		</div>		
@@ -152,11 +152,13 @@
 		<div class="col col-sm-6">
 			<div class="card bg-light p-3 shadow-sm">
 				<div class="card-title">
-					<h1 class="h4">Top customers</h1>
+					<h1 class="h4"><i class="stat-icon fa fa-users"></i> Top Customers</h1>
 				</div>				
-				<div class="card-body">
+				<div class="list-group list-group-flush">
 				@foreach ($results->top_customers as $item)
-					<dd>{{ $item->name }} ({{ currency_format($item->value) }})</dd>
+					<div class="list-group-item bg-transparent">
+						<b>{{ $item->name }}</b> <em class="pull-right">{{ currency_format($item->value) }}</em>
+					</div>
 				@endforeach
 				</div>
 			</div>
@@ -165,11 +167,13 @@
 		<div class="col col-sm-6">
 			<div class="card bg-light p-3 shadow-sm">
 				<div class="card-title">
-					<h1 class="h4">Bottom customers</h1>
-				</div>					
-				<div class="card-body">
+					<h1 class="h4"><i class="stat-icon fa fa-users"></i> Bottom Customers</h1>
+				</div>
+				<div class="list-group list-group-flush">
 				@foreach ($results->bottom_customers as $item)
-					<dd>{{ $item->name }} ({{ currency_format($item->value) }})</dd>
+					<div class="list-group-item bg-transparent">
+						<b>{{ $item->name }}</b> <em class="pull-right">{{ currency_format($item->value) }}</em>
+					</div>
 				@endforeach
 				</div>
 			</div>
@@ -182,11 +186,13 @@
 		<div class="col col-sm-6">
 			<div class="card bg-light p-3 shadow-sm">
 				<div class="card-title">
-					<h1 class="h4">Top items</h1>
-				</div>					
-				<div class="card-body">
+				    <h1 class="h4"><i class="stat-icon fa fa-shopping-bag"></i> Top Items</h1>
+				</div>
+				<div class="list-group list-group-flush">
 				@foreach ($results->top_items as $item)
-					<dd>{{ $item->name }} ({{ $item->quantity }})</dd>
+					<div class="list-group-item bg-transparent">
+						<b>{{ $item->name }}</b>  <em class="pull-right">{{ $item->quantity }}</em>
+					</div>
 				@endforeach
 				</div>
 			</div>
@@ -195,11 +201,13 @@
 		<div class="col col-sm-6">
 			<div class="card bg-light p-3 shadow-sm">
 				<div class="card-title">
-					<h1 class="h4">Bottom items</h1>
-				</div>				
-				<div class="card-body">
+					<h1 class="h4"><i class="stat-icon fa fa-shopping-bag"></i> Bottom Items</h1>
+				</div>
+				<div class="list-group list-group-flush">
 				@foreach ($results->bottom_items as $item)
-					<dd>{{ $item->name }} ({{ $item->quantity }})</dd>
+					<div class="list-group-item bg-transparent">
+						<b>{{ $item->name }}</b>  <em class="pull-right">{{ $item->quantity }}</em>
+					</div>
 				@endforeach
 				</div>
 			</div>
@@ -212,12 +220,29 @@
 		<div class="col col-sm-3">
 			<div class="card bg-light p-3 shadow-sm">
 			<div class="card-title">
-				<h1 class="h4">Orders by day</h1>
+				<h1 class="h4"><i class="stat-icon fa fa-calendar"></i> Orders by Day</h1>
 			</div>
-			<div class="card-body">
-				@foreach ($results->orders_by_day as $key=>$item)
-					<dd>{{ date('l', strtotime("Sunday + $key Days")) }} {{ currency_format($item->value) }} / {{ $item->count }}</dd>
-				@endforeach
+			<div class="list-group list-group-flush">
+            @foreach ($results->orders_by_day as $key=>$item)
+				<div class="list-group-item bg-transparent">
+					<b>{{ date('l', strtotime("Sunday + $key Days")) }}</b> <em class="pull-right">{{ currency_format($item->value) }} / {{ $item->count }}</em>
+				</div>
+			@endforeach
+				</div>
+			</div>
+		</div>
+
+		<div class="col col-sm-3">
+			<div class="card bg-light p-3 shadow-sm">
+            <div class="card-title">
+                <h1 class="h4"><i class="stat-icon fa fa-clock"></i> Orders by Hour</h1>
+            </div>
+			<div class="list-group list-group-flush">
+            @foreach ($results->orders_by_hour as $key=>$item)
+                <div class="list-group-item bg-transparent">
+					<b>{{ str_pad($key, 2, '0', STR_PAD_LEFT).':00 - '.str_pad($key+1, 2, '0', STR_PAD_LEFT).':00' }}</b> <em class="pull-right">{{ currency_format($item->value) }} / {{ $item->count }}</em>
+				</div>
+            @endforeach
 				</div>
 			</div>
 		</div>
@@ -225,25 +250,14 @@
 		<div class="col col-sm-3">
 			<div class="card bg-light p-3 shadow-sm">
 				<div class="card-title">
-					<h1 class="h4">Orders by hour</h1>
+					<h1 class="h4"><i class="stat-icon fa fa-stream"></i> Orders by Category</h1>
 				</div>
-				<div class="card-body">
-				@foreach ($results->orders_by_hour as $key=>$item)
-					<dd>{{ str_pad($key, 2, '0', STR_PAD_LEFT).':00 - '.str_pad($key+1, 2, '0', STR_PAD_LEFT).':00' }} {{ currency_format($item->value) }} / {{ $item->count }}</dd>
-				@endforeach
+			<div class="list-group list-group-flush">
+            @foreach ($results->orders_by_category as $key=>$item)
+				<div class="list-group-item bg-transparent">
+					<b>{{ $item->name }}</b> <em class="pull-right">{{ currency_format($item->value) }} / {{ $item->count }}</em>
 				</div>
-			</div>
-		</div>
-
-		<div class="col col-sm-3">
-			<div class="card bg-light p-3 shadow-sm">
-				<div class="card-title">
-					<h1 class="h4">Orders by category</h1>
-				</div>
-				<div class="card-body">
-				@foreach ($results->orders_by_category as $key=>$item)
-					<dd>{{ $item->name }} {{ currency_format($item->value) }} / {{ $item->count }}</dd>
-				@endforeach
+			@endforeach
 				</div>
 			</div>
 		</div>
@@ -251,12 +265,14 @@
 		<div class="col col-sm-3">
 			<div class="card bg-light p-3 shadow-sm">
 				<div class="card-title">
-					<h1 class="h4">Orders by payment type</h1>
+					<h1 class="h4"><i class="stat-icon fa fa-money-check-alt"></i> Orders by Payment Type</h1>
 				</div>
-				<div class="card-body">
-				@foreach ($results->orders_by_payment_method as $key=>$item)
-					<dd>{{ $item->name }} {{ currency_format($item->value) }} / {{ $item->count }}</dd>
-				@endforeach
+            <div class="list-group list-group-flush">
+            @foreach ($results->orders_by_payment_method as $key=>$item)
+				<div class="list-group-item bg-transparent">
+					<b>{{ $item->name }}</b> <em class="pull-right"> {{ currency_format($item->value) }} / {{ $item->count }}</em>
+				</div>
+			@endforeach
 				</div>
 			</div>
 		</div>
