@@ -185,7 +185,7 @@
 		<div class="col col-sm-6">
 			<div class="card bg-light p-3 shadow-sm">
 				<div class="card-title">
-				    <h1 class="h4"><i class="stat-icon fa fa-shopping-bag"></i> Top Items</h1>
+				    <h1 class="h4"><i class="stat-icon fa fa-shopping-bag"></i> Best Selling Items</h1>
 				</div>
 				<div class="list-group list-group-flush">
 				@foreach ($results->top_items as $item)
@@ -200,7 +200,7 @@
 		<div class="col col-sm-6">
 			<div class="card bg-light p-3 shadow-sm">
 				<div class="card-title">
-					<h1 class="h4"><i class="stat-icon fa fa-shopping-bag"></i> Bottom Items</h1>
+					<h1 class="h4"><i class="stat-icon fa fa-shopping-bag"></i> Worst Selling Items</h1>
 				</div>
 				<div class="list-group list-group-flush">
 				@foreach ($results->bottom_items as $item)
