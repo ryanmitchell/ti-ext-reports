@@ -1,14 +1,13 @@
 	<div class="row-fluid">
-			
-    @if (sizeof($this->getLocations()) > 1)
-					
-	<div class="list-filter" id="filter-list-filter">
+								
+	<div class="list-filter border-top-0 mb-5" id="filter-list-filter">
 		
 	    <form id="filter-form" class="form-inline" accept-charset="utf-8" method="GET" action="<?= admin_url('thoughtco/reports/dashboard'); ?>" role="form">
 		    	
 	        <div class="d-sm-flex flex-sm-wrap w-100 no-gutters">
 		        
-				<div class="col-sm-3 pr-5">
+				@if (sizeof($this->getLocations()) > 1)
+				<div class="col-7 pr-5">
 					
 					<div class="filter-scope form-group">
 						
@@ -21,9 +20,10 @@
             			
             		</div>
             		
-		        </div>	 
+		        </div>	
+				@endif  
 		        
-				<div class="col-sm-2 pr-5">
+				<div class="col-2 pr-5">
 					
 					<div class="filter-scope date form-group">
 						
@@ -44,7 +44,7 @@
             		
 		        </div>      
 		        
-				<div class="col-sm-2 pr-5">
+				<div class="col-2 pr-5">
 					
 					<div class="filter-scope date form-group">
 						
@@ -65,7 +65,7 @@
             		
 		        </div> 		        
 		        		        
-				<div class="col-sm-1">
+				<div class="col-1">
 					
 					<label>&nbsp;</label>
 					<button type="submit" class="btn btn-primary">@lang('thoughtco.kitchendisplay::default.btn_view')</button>
@@ -77,7 +77,6 @@
 		</form>
 		
 	</div>
-	@endif	 
         
 	<div class="row mx-1">
 			
