@@ -4,12 +4,12 @@
 		
 	    <form id="filter-form" class="form-inline" accept-charset="utf-8" method="GET" action="<?= admin_url('thoughtco/reports/dashboard'); ?>" role="form">
 		    	
-	        <div class="d-sm-flex flex-sm-wrap w-100 no-gutters">
+			<div class="d-sm-flex flex-sm-wrap w-100 no-gutters">
 		        
 				@if (sizeof($this->getLocations()) > 1)
-				<div class="col-7 pr-5">
+				<div class="col col-md-6 col-lg-4">
 					
-					<div class="filter-scope form-group">
+					<div class="filter-scope form-group pr-5 mb-2">
 						
 						<label for="fld-location">Location</label>
 						<select name="location" class="form-control select2-hidden-accessible" id="fld-location">
@@ -23,9 +23,9 @@
 		        </div>	
 				@endif  
 		        
-				<div class="col-2 pr-5">
+				<div class="col col-md-6 col-lg-3">
 					
-					<div class="filter-scope date form-group">
+					<div class="filter-scope date form-group pr-5 mb-2">
 						
 						<label for="datepicker-formfixeddate-date-fixed-startdate">Start Date</label>
 						<div id="datepicker-formfixeddate-fixed-startdate" class="control-datepicker">
@@ -44,9 +44,9 @@
             		
 		        </div>      
 		        
-				<div class="col-2 pr-5">
+				<div class="col col-md-6 col-lg-3">
 					
-					<div class="filter-scope date form-group">
+					<div class="filter-scope date form-group pr-5 mb-2">
 						
 						<label for="datepicker-formfixeddate-date-fixed-enddate">End Date</label>
 						<div id="datepicker-formfixeddate-fixed-enddate" class="control-datepicker">
@@ -65,7 +65,7 @@
             		
 		        </div> 		        
 		        		        
-				<div class="col-1">
+				<div class="col col-md-1 col-lg-1">
 					
 					<label>&nbsp;</label>
 					<button type="submit" class="btn btn-primary">@lang('thoughtco.kitchendisplay::default.btn_view')</button>
