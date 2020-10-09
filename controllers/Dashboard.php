@@ -4,10 +4,11 @@ namespace Thoughtco\Reports\Controllers;
 
 use AdminMenu;
 use Admin\Facades\AdminLocation;
-use Admin\Models\Locations_model;
-use Admin\Models\Orders_model;
-use Admin\Models\Menus_model;
 use Admin\Models\Categories_model;
+use Admin\Models\Customers_model;
+use Admin\Models\Locations_model;
+use Admin\Models\Menus_model;
+use Admin\Models\Orders_model;
 use ApplicationException;
 use Carbon\Carbon;
 use DB;
@@ -159,24 +160,41 @@ class Dashboard extends \Admin\Classes\AdminController
 		$ordersByCustomer = $orders->groupBy('email');
 
 		// get orders by customers customers
-		$results['orders_by_customer'] = $ordersByCustomer
+		$results['orders_by_customer'] = $ordersByCustomer = $ordersByCustomer
 		->map(function($ordersByCustomer, $key) {
 
 			if (!$first = $ordersByCustomer->first())
 				return false;
 
 			return (object)[
-				'name' => $first->first_name.' '.$first->first()->last_name,
-				'email' => $first->first()->email,
+				'customer_id' => $first->customer_id,
+				'name' => $first->first_name.' '.$first->last_name,
+				'email' => $first->email,
 				'value' => $ordersByCustomer->sum('order_total'),
 			];
 		});
+				
+		// build customer items to include zero sales
+		$customerSalesWithZero = Customers_model::all()
+		->map(function($customer) use ($ordersByCustomer){
+			if ($el = $ordersByCustomer->firstWhere('customer_id', $customer->customer_id))
+				return $el;
+				
+			return (object)[
+				'customer_id' => $customer->customer_id,
+				'name' => $customer->first_name.' '.$customer->last_name,
+				'email' => 0,
+				'value' => 0,				
+			];
+		});		
 
-		$results['top_customers'] = $results['orders_by_customer']
+		$results['top_customers'] = $customerSalesWithZero
+		->sortBy('name')
 		->sortByDesc('value')
 		->slice(0, 10);
 
-		$results['bottom_customers'] = $results['orders_by_customer']
+		$results['bottom_customers'] = $customerSalesWithZero
+		->sortBy('name')
 		->sortBy('value')
 		->slice(0, 10);
 
@@ -236,27 +254,42 @@ class Dashboard extends \Admin\Classes\AdminController
 				'name' => $first->name,
 			];
 		});
-
-		// get best selling items
-		$results['top_items'] = $orderItems
-		->sortByDesc('quantity')
-		->slice(0, 10);
-
-		// get worst selling items
-		$results['bottom_items'] = $orderItems
-		->sortBy('quantity')
-		->slice(0, 10);
-
+		
 		// get a list of menus vs categories
-		$menusCategories = Menus_model::where('menu_status', 1)
-		->get()
+		$menusCategories = Menus_model::get()
 		->map(function($menu) {
 			return (object)[
 				'menu_id' => $menu->menu_id,
+				'name' => $menu->menu_name,
 				'categories' => $menu->categories->pluck('category_id')->toArray()
 			];
 		})
 		->keyBy('menu_id');
+		
+		// build menu items to include zero sales
+		$menuSalesWithZero = $menusCategories->map(function($menu) use ($orderItems){
+			if ($el = $orderItems->firstWhere('menu_id', $menu->menu_id))
+				return $el;
+			
+			return (object)[
+				'subtotal' => 0,
+				'quantity' => 0,
+				'menu_id' => $menu->menu_id,
+				'name' => $menu->name,				
+			];
+		});
+		
+		// get best selling items
+		$results['top_items'] = $menuSalesWithZero
+		->sortBy('name')
+		->sortByDesc('quantity')
+		->slice(0, 10);
+
+		// get worst selling items
+		$results['bottom_items'] = $menuSalesWithZero
+		->sortBy('name')
+		->sortBy('quantity')
+		->slice(0, 10);
 
 		// get a list of categories
 		$categories = Categories_model::where('status', 1)
