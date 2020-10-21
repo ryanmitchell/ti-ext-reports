@@ -43,6 +43,7 @@ class Dashboard extends \Admin\Classes\AdminController
 		$this->addJs('/app/admin/formwidgets/datepicker/assets/vendor/datepicker/bootstrap-datepicker.min.js', 'bootstrap-datepicker-js');
 		$this->addCss('/app/admin/formwidgets/datepicker/assets/css/datepicker.css', 'datepicker-css');
 		$this->addJs('/app/admin/formwidgets/datepicker/assets/js/datepicker.js', 'datepicker-js');
+        $this->addCss('/app/admin/dashboardwidgets/statistics/assets/css/statistics.css', 'statistics-css');
 
 		[$locationParam, $startDate, $endDate] = $this->getParams();
 		$this->vars['locationParam'] = $locationParam;
@@ -76,17 +77,17 @@ class Dashboard extends \Admin\Classes\AdminController
 		{
 			if (AdminLocation::getId() === NULL || AdminLocation::getId() == $l->location_id)
 			{
-				if ($l->location_status)
-				{
+				//if ($l->location_status)
+				//{
 					$locationNames[$l->location_id] = $l->location_name;
 					$locations[] = $l;
-				}
+				//}
 			}
 		}
 
 		$this->locationNames = $locationNames;
-		$this->locations = collect($locations);
-
+		$this->locations = collect($locations)->keyBy('location_id');
+		
 		return $locationNames;
 	}
 
