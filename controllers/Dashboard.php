@@ -39,10 +39,13 @@ class Dashboard extends \Admin\Classes\AdminController
 	public function index()
 	{
 		$this->addJs('/app/system/assets/ui/js/vendor/moment.min.js', 'moment-js');
-		$this->addCss('/app/admin/formwidgets/datepicker/assets/vendor/datepicker/bootstrap-datepicker.min.css', 'bootstrap-datepicker-css');
 		$this->addJs('/app/admin/formwidgets/datepicker/assets/vendor/datepicker/bootstrap-datepicker.min.js', 'bootstrap-datepicker-js');
-		$this->addCss('/app/admin/formwidgets/datepicker/assets/css/datepicker.css', 'datepicker-css');
 		$this->addJs('/app/admin/formwidgets/datepicker/assets/js/datepicker.js', 'datepicker-js');
+		$this->addJs('/app/admin/dashboardwidgets/charts/assets/vendor/chartjs/Chart.min.js', 'chart-js');
+		$this->addJs('$/thoughtco/reports/assets/js/charts.js', 'thoughtco-reports-charts');
+		
+		$this->addCss('/app/admin/formwidgets/datepicker/assets/vendor/datepicker/bootstrap-datepicker.min.css', 'bootstrap-datepicker-css');
+		$this->addCss('/app/admin/formwidgets/datepicker/assets/css/datepicker.css', 'datepicker-css');
         $this->addCss('/app/admin/dashboardwidgets/statistics/assets/css/statistics.css', 'statistics-css');
 
 		[$locationParam, $startDate, $endDate] = $this->getParams();
@@ -208,11 +211,23 @@ class Dashboard extends \Admin\Classes\AdminController
 			});
 
 			return (object)[
+				'day' => $dayOfWeek,
 				'value' => $ordersOnDay->sum('order_total'),
 				'count' => $ordersOnDay->count(),
+				'color' => 'hsl(50, 98.3%, '.(80 - floor(53.5 * $dayOfWeek/7)).'%)',
 			];
 
 		});
+		
+		$results['orders_by_day_data'] = [
+			'datasets' => [
+        		[
+					'data' => $results['orders_by_day']->map(function($v){ return $v->value; }),
+					'backgroundColor' => $results['orders_by_day']->map(function($v){ return $v->color; })
+				],
+			],
+			'labels' => $results['orders_by_day']->map(function($v){ return date('l', strtotime('Sunday +'.$v->day.' days')). ' ('.currency_format($v->value).' / '.$v->count.')'; }),
+		];
 
 		// get order value and count by hour
 		$results['orders_by_hour'] = collect([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23])
@@ -224,11 +239,23 @@ class Dashboard extends \Admin\Classes\AdminController
 			});
 
 			return (object)[
-				'value' => $ordersInHour->sum('order_total'),
+				'hour' => $hourOfDay,
+				'value' => round($ordersInHour->sum('order_total'), 2),
 				'count' => $ordersInHour->count(),
+				'color' => 'hsl(211, 100%, '.(100 - floor(50 * $hourOfDay/24)).'%)',
 			];
 
 		});
+		
+		$results['orders_by_hour_data'] = [
+			'datasets' => [
+        		[
+					'data' => $results['orders_by_hour']->map(function($v){ return $v->value; }),
+					'backgroundColor' => $results['orders_by_hour']->map(function($v){ return $v->color; })
+				],
+			],
+			'labels' => $results['orders_by_hour']->map(function($v){ return str_pad($v->hour, 2, '0', STR_PAD_LEFT).':00-'.str_pad($v->hour+1, 2, '0', STR_PAD_LEFT).':00 ('.currency_format($v->value).' / '.$v->count.')'; }),
+		];
 
 		// get ids
 		$orderIds = $orders->pluck('order_id');
@@ -297,10 +324,13 @@ class Dashboard extends \Admin\Classes\AdminController
 		->get()
 		->sortBy('name')
 		->pluck('name', 'category_id');
+		
+		$categoryCount = $categories->count();
+		$categoryIndex = 0;
 
 		// get sales by category
 		$results['orders_by_category'] = $categories
-		->map(function($category, $categoryKey) use($orderItems, $menusCategories) {
+		->map(function($category, $categoryKey) use($orderItems, $menusCategories, $categoryCount, &$categoryIndex) {
 
 			$ordersInThisCategory = $orderItems
 			->filter(function($orderItem) use($categoryKey, $menusCategories) {
@@ -316,9 +346,20 @@ class Dashboard extends \Admin\Classes\AdminController
 				'name' => $category,
 				'value' => $ordersInThisCategory->sum('subtotal'),
 				'count' => $ordersInThisCategory->count(),
+				'color' => 'hsl(134, 61.4%, '.(80 - floor(40.6 * $categoryIndex++/$categoryCount)).'%)',
 			];
 
 		});
+		
+		$results['orders_by_category_data'] = [
+			'datasets' => [
+        		[
+					'data' => $results['orders_by_category']->map(function($v){ return $v->value; })->values(),
+					'backgroundColor' => $results['orders_by_category']->map(function($v){ return $v->color; })->values()
+				],
+			],
+			'labels' => $results['orders_by_category']->map(function($v){ return $v->name. ' ('.currency_format($v->value).' / '.$v->count.')'; })->values(),
+		];
 
 		// get payment methods for this location
 		$paymentMethods = $this->locations->get($locationParam)
@@ -329,10 +370,13 @@ class Dashboard extends \Admin\Classes\AdminController
 				'code' => $method->code,
 			];
 		});
-
+		
+		$paymentMethodCount = $paymentMethods->count();
+		$paymentMethodIndex = 0;
+		
 		// get orders by payment method
 		$results['orders_by_payment_method'] = $paymentMethods
-		->map(function($method) use($orders){
+		->map(function($method) use($orders, $paymentMethodCount, &$paymentMethodIndex){
 
 			$ordersUsingThisMethod = $orders
 			->filter(function($orderItem) use($method){
@@ -343,10 +387,21 @@ class Dashboard extends \Admin\Classes\AdminController
 
 			$method->value = $ordersUsingThisMethod->sum('order_total');
 			$method->count = $ordersUsingThisMethod->count();
+			$method->color = 'hsl(354, 70.5%, '.(80 - floor(53.5 * $paymentMethodIndex++/$paymentMethodCount)).'%)';
 
 			return $method;
 
 		});
+		
+		$results['orders_by_payment_method_data'] = [
+			'datasets' => [
+        		[
+					'data' => $results['orders_by_payment_method']->map(function($v){ return $v->value; })->values(),
+					'backgroundColor' => $results['orders_by_payment_method']->map(function($v){ return $v->color; })->values()
+				],
+			],
+			'labels' => $results['orders_by_payment_method']->map(function($v){ return $v->name. ' ('.currency_format($v->value).' / '.$v->count.')'; })->values(),
+		];
 
 		return (object)$results;
 	}
