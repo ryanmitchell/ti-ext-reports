@@ -1,4 +1,4 @@
-	<div class="row-fluid">
+<div class="row-fluid">
 								
 	<div class="list-filter border-top-0 mb-5" id="filter-list-filter">
 		
@@ -35,7 +35,7 @@
 							    <span class="input-group-prepend" data-original-title="" title="">
 							        <span class="input-group-icon" data-original-title="" title=""><i class="fa fa-calendar-o"></i></span> 
 							    </span>
-							    <input type="hidden" name="start_date" value="<?= $startDate->format('Y-m-d'); ?>" data-datepicker-value="{{ $startDate->format('Y-m-d') }}">
+							    <input type="hidden" name="start_date" value="{{ $startDate->format('Y-m-d') }}" data-datepicker-value="{{ $startDate->format('Y-m-d') }}">
 							</div>
             			
             			</div>						
