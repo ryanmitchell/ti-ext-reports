@@ -43,7 +43,7 @@ class Dashboard extends \Admin\Classes\AdminController
 		$this->addJs('/app/admin/formwidgets/datepicker/assets/js/datepicker.js', 'datepicker-js');
 		$this->addJs('/app/admin/dashboardwidgets/charts/assets/vendor/chartjs/Chart.min.js', 'chart-js');
 		$this->addJs('$/thoughtco/reports/assets/js/charts.js', 'thoughtco-reports-charts');
-		
+
 		$this->addCss('/app/admin/formwidgets/datepicker/assets/vendor/datepicker/bootstrap-datepicker.min.css', 'bootstrap-datepicker-css');
 		$this->addCss('/app/admin/formwidgets/datepicker/assets/css/datepicker.css', 'datepicker-css');
         $this->addCss('/app/admin/dashboardwidgets/statistics/assets/css/statistics.css', 'statistics-css');
@@ -90,7 +90,7 @@ class Dashboard extends \Admin\Classes\AdminController
 
 		$this->locationNames = $locationNames;
 		$this->locations = collect($locations)->keyBy('location_id');
-		
+
 		return $locationNames;
 	}
 
@@ -115,13 +115,13 @@ class Dashboard extends \Admin\Classes\AdminController
 			'orders_by_customer' => [],
 			'orders_by_category' => [],
 		];
+		
+		$statusesToQuery = setting('completed_order_status');
+		$statusesToQuery[] = setting('canceled_order_status');
 
 		// get order ids for the time period
-		$orders = Orders_model::where([
-			['order_date', '>=', $startDate->format('Y-m-d')],
-			['order_date', '<=', $endDate->format('Y-m-d')],
-		])
-		->whereIn('status_id', setting('completed_order_status'))
+		$orders = Orders_model::whereBetween('order_date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+		->whereIn('status_id', $statusesToQuery)
 		->get();
 
 		// get total sales
@@ -177,20 +177,20 @@ class Dashboard extends \Admin\Classes\AdminController
 				'value' => $ordersByCustomer->sum('order_total'),
 			];
 		});
-				
+
 		// build customer items to include zero sales
 		$customerSalesWithZero = Customers_model::all()
 		->map(function($customer) use ($ordersByCustomer){
 			if ($el = $ordersByCustomer->firstWhere('customer_id', $customer->customer_id))
 				return $el;
-				
+
 			return (object)[
 				'customer_id' => $customer->customer_id,
 				'name' => $customer->first_name.' '.$customer->last_name,
 				'email' => 0,
-				'value' => 0,				
+				'value' => 0,
 			];
-		});		
+		});
 
 		$results['top_customers'] = $customerSalesWithZero
 		->sortBy('name')
@@ -218,7 +218,7 @@ class Dashboard extends \Admin\Classes\AdminController
 			];
 
 		});
-		
+
 		$results['orders_by_day_data'] = [
 			'datasets' => [
         		[
@@ -246,7 +246,7 @@ class Dashboard extends \Admin\Classes\AdminController
 			];
 
 		});
-		
+
 		$results['orders_by_hour_data'] = [
 			'datasets' => [
         		[
@@ -282,7 +282,7 @@ class Dashboard extends \Admin\Classes\AdminController
 				'name' => $first->name,
 			];
 		});
-		
+
 		// get a list of menus vs categories
 		$menusCategories = Menus_model::get()
 		->map(function($menu) {
@@ -293,20 +293,20 @@ class Dashboard extends \Admin\Classes\AdminController
 			];
 		})
 		->keyBy('menu_id');
-		
+
 		// build menu items to include zero sales
 		$menuSalesWithZero = $menusCategories->map(function($menu) use ($orderItems){
 			if ($el = $orderItems->firstWhere('menu_id', $menu->menu_id))
 				return $el;
-			
+
 			return (object)[
 				'subtotal' => 0,
 				'quantity' => 0,
 				'menu_id' => $menu->menu_id,
-				'name' => $menu->name,				
+				'name' => $menu->name,
 			];
 		});
-		
+
 		// get best selling items
 		$results['top_items'] = $menuSalesWithZero
 		->sortBy('name')
@@ -324,7 +324,7 @@ class Dashboard extends \Admin\Classes\AdminController
 		->get()
 		->sortBy('name')
 		->pluck('name', 'category_id');
-		
+
 		$categoryCount = $categories->count();
 		$categoryIndex = 0;
 
@@ -350,7 +350,7 @@ class Dashboard extends \Admin\Classes\AdminController
 			];
 
 		});
-		
+
 		$results['orders_by_category_data'] = [
 			'datasets' => [
         		[
@@ -370,10 +370,10 @@ class Dashboard extends \Admin\Classes\AdminController
 				'code' => $method->code,
 			];
 		});
-		
+
 		$paymentMethodCount = $paymentMethods->count();
 		$paymentMethodIndex = 0;
-		
+
 		// get orders by payment method
 		$results['orders_by_payment_method'] = $paymentMethods
 		->map(function($method) use($orders, $paymentMethodCount, &$paymentMethodIndex){
@@ -392,7 +392,7 @@ class Dashboard extends \Admin\Classes\AdminController
 			return $method;
 
 		});
-		
+
 		$results['orders_by_payment_method_data'] = [
 			'datasets' => [
         		[
