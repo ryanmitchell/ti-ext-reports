@@ -82,7 +82,7 @@ class Dashboard extends \Admin\Classes\AdminController
                 'class' => \Thoughtco\Reports\Widgets\Statistics::class,
                 'priority' => 4,
                 'config' => [
-                    'context' => 'collection_orders_value',
+                    'context' => 'pickup_orders_value',
                     'width' => '4',
                 ],
             ],

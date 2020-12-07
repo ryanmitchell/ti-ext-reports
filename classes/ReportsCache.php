@@ -47,7 +47,7 @@ class ReportsCache {
 		$results = [
 			'total_sales' => 0,
 			'total_orders' => 0,
-			'quantity_of_items' => 0,
+			'total_items' => 0,
 			'cancelled_orders_value',
 			'cancelled_orders_count',
 			'delivery_orders_value' => 0, 
@@ -66,35 +66,14 @@ class ReportsCache {
 		];
 		
 		$statusesToQuery = setting('completed_order_status');
-		$statusesToQuery[] = setting('canceled_order_status');
+		$cancelledStatus = setting('canceled_order_status');
+		$statusesToQuery[] = $cancelledStatus;
 
 		// get order ids for the time period
 		$orders = Orders_model::whereBetween('order_date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
 		->where('location_id', $locationModel->getKey())
 		->whereIn('status_id', $statusesToQuery)
 		->get();
-
-		// get total sales
-		$results['total_sales'] = currency_format($orders->sum('order_total'));
-
-		// get total orders
-		$results['total_orders'] = $orders->count();
-
-		// pickup order stats
-		$pickupOrders = $orders->filter(function($order) {
-			return $order->order_type == 'collection';
-		});
-
-		$results['pickup_orders_value'] = currency_format($pickupOrders->sum('order_total'));
-		$results['pickup_orders_count'] = $pickupOrders->count();
-
-		// delivery order stats
-		$deliveryOrders = $orders->filter(function($order) {
-			return $order->order_type == 'delivery';
-		});
-
-		$results['delivery_orders_value'] = currency_format($deliveryOrders->sum('order_total'));
-		$results['delivery_orders_count'] = $deliveryOrders->count();
 		
 		// cancelled order stats
 		$cancelledOrders = $orders->filter(function($order) {
@@ -103,6 +82,28 @@ class ReportsCache {
 
 		$results['cancelled_orders_value'] = currency_format($cancelledOrders->sum('order_total'));
 		$results['cancelled_orders_count'] = $cancelledOrders->count();
+		
+		// get total sales
+		$results['total_sales'] = currency_format($orders->sum('order_total') - $cancelledOrders->sum('order_total'));
+
+		// get total orders
+		$results['total_orders'] = $orders->count() - $cancelledOrders->count();
+
+		// pickup order stats
+		$pickupOrders = $orders->filter(function($order) use ($cancelledStatus){
+			return $order->order_type == 'collection' && $order->status_id != $cancelledStatus;
+		});
+
+		$results['pickup_orders_value'] = currency_format($pickupOrders->sum('order_total'));
+		$results['pickup_orders_count'] = $pickupOrders->count();
+
+		// delivery order stats
+		$deliveryOrders = $orders->filter(function($order) use ($cancelledStatus) {
+			return $order->order_type == 'delivery' && $order->status_id != $cancelledStatus;
+		});
+
+		$results['delivery_orders_value'] = currency_format($deliveryOrders->sum('order_total'));
+		$results['delivery_orders_count'] = $deliveryOrders->count();
 
 		// orders by customer
 		$ordersByCustomer = $orders->groupBy('email');
@@ -221,7 +222,7 @@ class ReportsCache {
 		->get();
 
 		// get quantity of items
-		$results['quantity_of_items'] = $orderItems->count();
+		$results['total_items'] = $orderItems->count();
 
 		// get all order items
 		$results['order_items'] = $orderItems = $orderItems

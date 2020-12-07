@@ -52,11 +52,11 @@ class Statistics extends BaseDashboardWidget
                 'label' => 'lang:thoughtco.reports::default.text_total_items',
                 'icon' => ' bg-warning text-white fa fa-line-chart',
             ],
-            'collection_orders_value' => [
+            'pickup_orders_value' => [
                 'label' => 'lang:thoughtco.reports::default.text_collection_orders',
                 'icon' => ' bg-blue text-white fa fa-store',
             ],  
-            'collection_orders_count' => [
+            'pickup_orders' => [
                 'label' => 'lang:thoughtco.reports::default.text_collection_orders_count',
                 'icon' => ' bg-blue text-white fa fa-store',
             ],             
