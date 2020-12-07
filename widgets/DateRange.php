@@ -36,7 +36,10 @@ class DateRange extends BaseDashboardWidget
     public function loadAssets()
     {
 		$this->addJs('/app/admin/formwidgets/datepicker/assets/vendor/datepicker/bootstrap-datepicker.min.js', 'bootstrap-datepicker-js');
-		$this->addJs('/app/admin/formwidgets/datepicker/assets/js/datepicker.js', 'datepicker-js');
+    $this->addJs('/app/admin/formwidgets/datepicker/assets/js/datepicker.js', 'datepicker-js');
+    
+    $this->addJs('extensions/thoughtco/reports/assets/js/datepicker-custom.js', 'datepicker-custom-js');
+    $this->addCss('extensions/thoughtco/reports/assets/css/datepicker-custom.css', 'datepicker-custom-css');
         
 		$this->addCss('/app/admin/formwidgets/datepicker/assets/vendor/datepicker/bootstrap-datepicker.min.css', 'bootstrap-datepicker-css');
 		$this->addCss('/app/admin/formwidgets/datepicker/assets/css/datepicker.css', 'datepicker-css');        
