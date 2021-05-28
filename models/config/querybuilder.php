@@ -56,6 +56,35 @@ return [
             'builderjson' => [
                 'label' => 'lang:thoughtco.reports::default.label_rules',
                 'type' => 'querybuilder',
+				'filters' => [
+		            'customers' => [
+		                'label' => 'Customers',
+		                'filters' => [
+		                    [
+		                        'id' => 'customer.name',
+		                        'label' => 'Customer name',
+		                        'type' => 'string',
+		                    ],
+		                    [
+		                        'id' => 'customer.email',
+		                        'label' => 'Customer email',
+		                        'type' => 'string',
+		                    ],  
+		                ] 
+		            ],
+		            'orders' => [
+		                'label' => 'Orders',
+		                'filters' => [
+		                    [
+		                        'id' => 'orders.location',
+		                        'label' => 'Location',
+		                        'type' => 'integer',
+		                        'input' => 'select',
+		                        'values' => \AdminLocation::listLocations(),
+		                    ],                    
+		                ]
+		            ]
+		        ],
             ],
 		],
     ],

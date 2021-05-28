@@ -39,8 +39,14 @@
         
         var inputElement = this.$inputElement;
         var builderElement = this.$builderElement[0].queryBuilder;
+        
+        var ignoreNextEvent = false;
+        builderElement.on('beforeDestroy', function(){
+           ignoreNextEvent = true;   
+        });
+        
         builderElement.on('rulesChanged', function(){
-            inputElement.val(JSON.stringify(builderElement.getRules()));   
+            inputElement.val(JSON.stringify(ignoreNextEvent ? [] : builderElement.getRules()));   
         });
 
     }
