@@ -36,7 +36,7 @@ class ReportsCache {
 	private static function buildCache()
 	{
 		
-		$locationModel = AdminLocation::getId() ? Locations_model::find(AdminLocation::getId()) : Locations_model::first();
+		$locationModel = AdminLocation::getId() ? Locations_model::find(AdminLocation::getId()) : false;
 		
 		$startDate = Request::get('start_date', strtotime('-1 month'));
 		$endDate = Request::get('end_date', strtotime('today'));
@@ -71,9 +71,12 @@ class ReportsCache {
 
 		// get order ids for the time period
 		$orders = Orders_model::whereBetween('order_date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
-		->where('location_id', $locationModel->getKey())
-		->whereIn('status_id', $statusesToQuery)
-		->get();
+			->whereIn('status_id', $statusesToQuery);
+			
+		if ($locationModel)
+			$orders->where('location_id', $locationModel->getKey());
+			
+		$orders = $orders->get();
 		
 		// cancelled order stats
 		$cancelledOrders = $orders->filter(function($order) {
@@ -318,14 +321,14 @@ class ReportsCache {
 		];
 
 		// get payment methods for this location
-		$paymentMethods = $locationModel
+		$paymentMethods = $locationModel ? $locationModel
 		->listAvailablePayments()
 		->map(function($method) {
 			return (object)[
 				'name' => $method->name,
 				'code' => $method->code,
 			];
-		});
+		}) : collect([]);
 
 		$paymentMethodCount = $paymentMethods->count();
 		$paymentMethodIndex = 0;

@@ -19,7 +19,7 @@ class Dashboard extends \Admin\Classes\AdminController
 	public function __construct()
 	{
 		parent::__construct();
-		AdminMenu::setContext('sales', 'reports');
+		AdminMenu::setContext('reports', 'dashboard');
 	}
 	
     public function index()

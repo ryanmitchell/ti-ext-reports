@@ -1,13 +1,29 @@
 <?php
 
 return [
-    'text_title' => 'Reports',
 
     'btn_view' => 'View',
+    
+    'column_title' => 'Title',
 
     'label_end_date' => 'End Date',
     'label_location' => 'Location',
     'label_start_date' => 'Start Date',
+    
+    'label_title' => 'Title',
+    'label_rules' => 'Rules',
+    
+    'qb' => [
+        'text_title' => 'Query Builder',  
+    ],
+
+    'text_builder_title' => 'Builder',
+    'text_dashboard_title' => 'Dashboard',
+    'text_title' => 'Reports',
+    
+    'text_builder_empty' => 'No reports defined',
+    'text_builder_title' => 'Query Builder',
+    'text_builder_form' => 'Build Query',
 
     'text_total_sales' => 'Total Sales',
     'text_total_orders' => 'Total Orders',
