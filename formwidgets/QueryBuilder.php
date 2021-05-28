@@ -35,11 +35,6 @@ class QueryBuilder extends BaseFormWidget
         $this->vars['name'] = $this->formField->getName();
         $this->vars['value'] = $value = $this->getLoadValue();
         $this->vars['filters'] = $this->getFilters();
-        $this->vars['fieldOptions'] = [
-            'customers' => 'Customers',
-            'orders' => 'Orders',
-        ];
-
     }
 
     public function loadAssets()
