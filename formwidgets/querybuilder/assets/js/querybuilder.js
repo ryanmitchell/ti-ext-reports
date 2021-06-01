@@ -28,11 +28,13 @@
         this.$value = { model: '' };
         if (this.$el.data('value')) {
             this.$value = this.$el.data('value');
-            if (this.$value.model)
-                this.$selectElement.val(this.$value.model);
         }
 
         this.makeBuilder();
+        
+        if (this.$value.model)
+            this.$selectElement.val(this.$value.model).trigger('change');
+            
     }
     
     tastyQueryBuilder.prototype.makeBuilder = function() { 

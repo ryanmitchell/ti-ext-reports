@@ -10,7 +10,7 @@ return [
 		            'href' => 'thoughtco/reports/builder/create',
 		        ],
                 'delete' => ['label' => 'lang:admin::lang.button_delete', 'class' => 'btn btn-danger', 'data-request-form' => '#list-form', 'data-request' => 'onDelete', 'data-request-data' => "_method:'DELETE'", 'data-request-data' => "_method:'DELETE'", 'data-request-confirm' => 'lang:admin::lang.alert_warning_confirm'],
-            
+
 			],
         ],
 		'filter' => [],
@@ -33,8 +33,8 @@ return [
                 'type' => 'text',
                 'valueFrom' => 'id',
                 'formatter' => function($record, $column, $value) {
-                    return '<a class="btn btn-primary" href="'.admin_url('thoughtco/reports/builder/view/'.$value).'">'.lang('thoughtco.reports::default.btn_view').'</a>';    
-                },                
+                    return '<a class="btn btn-primary" href="'.admin_url('thoughtco/reports/builder/view/'.$value).'">'.lang('thoughtco.reports::default.btn_view').'</a>';
+                },
             ],
         ],
     ],
@@ -85,8 +85,8 @@ return [
 		                        'input' => 'select',
 		                        'values' => \Admin\Models\Customer_groups_model::getDropdownOptions(),
                                 'operators' => [
-                                    'equal', 'not_equal', 
-                                ],                            
+                                    'equal', 'not_equal',
+                                ],
 		                    ],
 		                    [
 		                        'id' => 'customer.lastorder',
@@ -103,10 +103,10 @@ return [
                                     'autoclose' => true,
                                 ],
                                 'operators' => [
-                                    'equal', 'not_equal', 
-                                    'less', 'less_or_equal', 
-                                    'greater', 'greater_or_equal', 
-                                ],                                    
+                                    'equal', 'not_equal',
+                                    'less', 'less_or_equal',
+                                    'greater', 'greater_or_equal',
+                                ],
 		                    ],
 		                    [
 		                        'id' => 'customer.joined',
@@ -123,13 +123,13 @@ return [
                                     'autoclose' => true,
                                 ],
                                 'operators' => [
-                                    'equal', 'not_equal', 
-                                    'less', 'less_or_equal', 
-                                    'greater', 'greater_or_equal', 
-                                ],                                    
-		                    ],                            
-                            
-		                ] 
+                                    'equal', 'not_equal',
+                                    'less', 'less_or_equal',
+                                    'greater', 'greater_or_equal',
+                                ],
+		                    ],
+
+		                ]
 		            ],
 		            '\Admin\Models\Orders_model' => [
 		                'label' => 'Orders',
@@ -140,7 +140,7 @@ return [
 		                        'type' => 'integer',
 		                        'input' => 'select',
 		                        'values' => \AdminLocation::listLocations(),
-		                    ],   
+		                    ],
 		                    [
 		                        'id' => 'orders.customer_name',
 		                        'label' => lang('thoughtco.reports::default.qb.label_customer_name'),
@@ -173,10 +173,10 @@ return [
                                     'autoclose' => true,
                                 ],
                                 'operators' => [
-                                    'equal', 'not_equal', 
-                                    'less', 'less_or_equal', 
-                                    'greater', 'greater_or_equal', 
-                                ],                                    
+                                    'equal', 'not_equal',
+                                    'less', 'less_or_equal',
+                                    'greater', 'greater_or_equal',
+                                ],
 		                    ],
 		                    [
 		                        'id' => 'order_date',
@@ -193,26 +193,26 @@ return [
                                     'autoclose' => true,
                                 ],
                                 'operators' => [
-                                    'equal', 'not_equal', 
-                                    'less', 'less_or_equal', 
-                                    'greater', 'greater_or_equal', 
-                                ],                                
-		                    ],  
+                                    'equal', 'not_equal',
+                                    'less', 'less_or_equal',
+                                    'greater', 'greater_or_equal',
+                                ],
+		                    ],
 		                    [
 		                        'id' => 'order_type',
 		                        'label' => lang('thoughtco.reports::default.qb.label_orders_type'),
 		                        'type' => 'string',
 		                        'input' => 'select',
-		                        'values' => \AdminLocation::listLocations(),
+                                'options' => ['Admin\Models\Locations_model', 'getOrderTypeOptions'],
 		                    ],
 		                    [
 		                        'id' => 'orders.delivery_address',
 		                        'label' => lang('thoughtco.reports::default.qb.label_orders_address'),
 		                        'type' => 'string',
                                 'operators' => [
-                                    'contains', 'not_contains',    
-                                ],                                
-		                    ], 
+                                    'contains', 'not_contains',
+                                ],
+		                    ],
 		                    [
 		                        'id' => 'orders.categories',
 		                        'label' => lang('thoughtco.reports::default.qb.label_orders_categories'),
@@ -220,9 +220,9 @@ return [
 		                        'input' => 'select',
 		                        'values' => \Admin\Models\Categories_model::getDropdownOptions(),
                                 'operators' => [
-                                    'contains', 'not_contains',   
+                                    'contains', 'not_contains',
                                 ],
-		                    ],                            
+		                    ],
 		                    [
 		                        'id' => 'orders.menus',
 		                        'label' => lang('thoughtco.reports::default.qb.label_orders_menus'),
@@ -230,9 +230,9 @@ return [
 		                        'input' => 'select',
 		                        'values' => \Admin\Models\Menus_model::all()->pluck('menu_name', 'menu_id'),
                                 'operators' => [
-                                    'contains', 'not_contains',   
+                                    'contains', 'not_contains',
                                 ],
-		                    ],                                               
+		                    ],
 		                ]
 		            ]
 		        ],
