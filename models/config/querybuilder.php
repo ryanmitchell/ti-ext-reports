@@ -180,7 +180,7 @@ return [
 		                    ],
 		                    [
 		                        'id' => 'order_date',
-		                        'label' => lang('thoughtco.reports::default.qb.label_orders_enddate'),
+		                        'label' => lang('thoughtco.reports::default.qb.label_orders_date'),
 		                        'type' => 'date',
                                 'validation' => [
                                     'format' => 'YYYY/MM/DD',
