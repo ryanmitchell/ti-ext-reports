@@ -109,6 +109,19 @@ class Builder extends \Admin\Classes\AdminController
             }
             
         });
+        
+        // need to make these configurable
+        $columns = [
+            'order_id' => [
+                'title' => 'lang:admin::lang.orders.column_time_date',
+            ],
+            'first_name' => [
+                'title' => 'lang:admin::lang.label_status',
+            ],
+            'last_name' => [
+                'title' => 'lang:admin::lang.orders.column_comment',
+            ],
+        ];
             
         if ($csv = request()->input('csv')) {
             
@@ -117,9 +130,15 @@ class Builder extends \Admin\Classes\AdminController
             
             $table = $klass->newQuery();
             $query = $parser->parse(json_encode($model->builderjson['rules']), $table);
+            $data = $query->get();
+            
+            $columns = array_keys($columns);
+            $data = $data->map(function($row) use ($columns) { 
+                return $row->only($columns);
+            });
             
             $writer = Writer::createFromString();
-            $writer->insertAll(new \ArrayIterator($query->get()->toArray()));
+            $writer->insertAll(new \ArrayIterator($data->toArray()));
             
             echo $writer->getContent();
             exit();
@@ -135,17 +154,7 @@ class Builder extends \Admin\Classes\AdminController
             'attributes' => [
                 'model' => $model,
             ],
-            'columns' => [
-                'order_id' => [
-                    'title' => 'lang:admin::lang.orders.column_time_date',
-                ],
-                'first_name' => [
-                    'title' => 'lang:admin::lang.label_status',
-                ],
-                'last_name' => [
-                    'title' => 'lang:admin::lang.orders.column_comment',
-                ],
-            ],
+            'columns' => $columns,
             'useAjax' => TRUE,
             'defaultSort' => ['orders.order_id', 'desc'],
             'searchableFields' => ['first_name'],
