@@ -135,32 +135,32 @@ return [
 		                'label' => 'Orders',
 		                'filters' => [
 		                    [
-		                        'id' => 'orders.location',
+		                        'id' => 'location_id',
 		                        'label' => lang('thoughtco.reports::default.qb.label_location'),
 		                        'type' => 'integer',
 		                        'input' => 'select',
 		                        'values' => \AdminLocation::listLocations(),
 		                    ],   
 		                    [
-		                        'id' => 'customer.name',
+		                        'id' => 'orders.customer_name',
 		                        'label' => lang('thoughtco.reports::default.qb.label_customer_name'),
 		                        'type' => 'string',
 		                    ],
 		                    [
-		                        'id' => 'customer.email',
+		                        'id' => 'email',
 		                        'label' => lang('thoughtco.reports::default.qb.label_customer_email'),
 		                        'type' => 'string',
 		                    ],
 		                    [
-		                        'id' => 'customer.group',
+		                        'id' => 'orders.customer_group',
 		                        'label' => lang('thoughtco.reports::default.qb.label_customer_group'),
 		                        'type' => 'integer',
 		                        'input' => 'select',
 		                        'values' => \Admin\Models\Customer_groups_model::getDropdownOptions(),
 		                    ],
 		                    [
-		                        'id' => 'orders.startdate',
-		                        'label' => lang('thoughtco.reports::default.qb.label_orders_startdate'),
+		                        'id' => 'date_added',
+		                        'label' => lang('thoughtco.reports::default.qb.label_orders_added'),
 		                        'type' => 'date',
                                 'validation' => [
                                     'format' => 'YYYY/MM/DD',
@@ -179,7 +179,7 @@ return [
                                 ],                                    
 		                    ],
 		                    [
-		                        'id' => 'orders.enddate',
+		                        'id' => 'order_date',
 		                        'label' => lang('thoughtco.reports::default.qb.label_orders_enddate'),
 		                        'type' => 'date',
                                 'validation' => [
@@ -199,14 +199,14 @@ return [
                                 ],                                
 		                    ],  
 		                    [
-		                        'id' => 'orders.type',
+		                        'id' => 'order_type',
 		                        'label' => lang('thoughtco.reports::default.qb.label_orders_type'),
 		                        'type' => 'string',
 		                        'input' => 'select',
 		                        'values' => \AdminLocation::listLocations(),
 		                    ],
 		                    [
-		                        'id' => 'orders.deliveryaddress',
+		                        'id' => 'orders.delivery_address',
 		                        'label' => lang('thoughtco.reports::default.qb.label_orders_address'),
 		                        'type' => 'string',
                                 'operators' => [

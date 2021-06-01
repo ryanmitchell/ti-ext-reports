@@ -91,6 +91,12 @@ class Builder extends \Admin\Classes\AdminController
                 return $query->whereRaw('CONCAT(first_name, " ", last_name) '.$operator.' ?', [$value], $condition);    
             }
             
+            if ($field == 'orders.delivery_address') {
+                return $query->whereHas('address', function($query) {
+                    return $query->whereRaw('CONCAT(address_1, " ", address_2, " ", city, " ", state, " ", postcode) '.$operator.' ?', [$value], $condition);
+                }, $condition);
+            }            
+            
             if ($field == 'orders.menus') {
                 $query->join('order_menus', 'order_menus.order_id', '=', 'orders.order_id');
                 return $query->where('order_menus.menu_id', $operator, $value, $condition);
