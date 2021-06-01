@@ -131,8 +131,11 @@ class Builder extends \Admin\Classes\AdminController
             $table = $klass->newQuery();
             $query = $parser->parse(json_encode($model->builderjson['rules']), $table);
             $data = $query->get();
-            
-            $columns = array_keys($columns);
+
+            $columns = collect($columns)
+                ->keys()
+                ->toArray();
+
             $data = $data->map(function($row) use ($columns) { 
                 return $row->only($columns);
             });
