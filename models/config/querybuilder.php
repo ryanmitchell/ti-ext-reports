@@ -69,17 +69,17 @@ return [
 		                'label' => lang('thoughtco.reports::default.qb.label_customers'),
 		                'filters' => [
 		                    [
-		                        'id' => 'customer.name',
+		                        'id' => 'customers.name',
 		                        'label' => lang('thoughtco.reports::default.qb.label_customer_name'),
 		                        'type' => 'string',
 		                    ],
 		                    [
-		                        'id' => 'customer.email',
+		                        'id' => 'email',
 		                        'label' => lang('thoughtco.reports::default.qb.label_customer_email'),
 		                        'type' => 'string',
 		                    ],
 		                    [
-		                        'id' => 'customer.group',
+		                        'id' => 'customer_group_id',
 		                        'label' => lang('thoughtco.reports::default.qb.label_customer_group'),
 		                        'type' => 'string',
 		                        'input' => 'select',
@@ -89,8 +89,8 @@ return [
                                 ],
 		                    ],
 		                    [
-		                        'id' => 'customer.lastorder',
-		                        'label' => lang('thoughtco.reports::default.qb.label_customer_lastorder'),
+		                        'id' => 'customers.orderdate',
+		                        'label' => lang('thoughtco.reports::default.qb.label_customer_orderdate'),
 		                        'type' => 'date',
                                 'validation' => [
                                     'format' => 'YYYY/MM/DD',
@@ -109,7 +109,7 @@ return [
                                 ],
 		                    ],
 		                    [
-		                        'id' => 'customer.joined',
+		                        'id' => 'date_added',
 		                        'label' => lang('thoughtco.reports::default.qb.label_customer_joined'),
 		                        'type' => 'date',
                                 'validation' => [

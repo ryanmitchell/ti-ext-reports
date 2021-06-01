@@ -19,8 +19,8 @@ return [
         'label_customer_email' => 'Email',
         'label_customer_group' => 'Customer group',
         'label_customer_joined' => 'Joined date',
-        'label_customer_lastorder' => 'Last order date',
         'label_customer_name' => 'Name',
+        'label_customer_orderdate' => 'Order date',
         
         'label_location' => 'Location',
         

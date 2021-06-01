@@ -67,6 +67,12 @@ class Builder extends \Admin\Classes\AdminController
         // some fields require extending query
         Event::listen('thoughtco.reports.fieldToQuery', function ($controller, $query, $field, $operator, $value, $condition) 
         {
+            if ($field == 'customers.orderdate') {
+                return $query->whereHas('orders', function($query) {
+                    return $query->where('orders.order_date', $operator, $value);
+                }, $condition);                
+            }
+            
             if ($field == 'orders.categories') {
                 
                 $value = \Admin\Models\Menus_model::whereHas('categories', function($query) use ($value) {
@@ -87,7 +93,7 @@ class Builder extends \Admin\Classes\AdminController
                 }, $condition);
             }
             
-            if ($field == 'orders.customer_name') {
+            if ($field == 'orders.customer_name' || $field == 'customers.name') {
                 return $query->whereRaw('CONCAT(first_name, " ", last_name) '.$operator.' ?', [$value], $condition);    
             }
             
