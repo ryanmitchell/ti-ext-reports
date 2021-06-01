@@ -35,11 +35,13 @@ class Builder extends \Admin\Classes\AdminController
             'title' => 'lang:admin::lang.form.edit_title',
             'redirect' => 'thoughtco/reports/builder/edit/{id}',
             'redirectClose' => 'thoughtco/reports/builder',
+            'redirectNew' => 'thoughtco/reports/builder/create',
         ],
         'edit' => [
             'title' => 'lang:admin::lang.form.edit_title',
             'redirect' => 'thoughtco/reports/builder/edit/{id}',
             'redirectClose' => 'thoughtco/reports/builder',
+            'redirectNew' => 'thoughtco/reports/builder/create',
         ],
         'preview' => [
             'title' => 'lang:admin::lang.form.preview_title',
