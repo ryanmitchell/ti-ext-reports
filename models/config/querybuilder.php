@@ -234,6 +234,50 @@ return [
 		            ]
 		        ],
             ],
+            'list_columns' => [
+                'label' => 'lang:thoughtco.reports::default.label_list_cols',
+                'type' => 'repeater',
+                'sortable' => TRUE,
+                'commentAbove' => 'lang:thoughtco.reports::default.help_list_cols',
+                'form' => [
+                    'fields' => [
+                        'priority' => [
+                            'type' => 'hidden',
+                        ],
+                        'column' => [
+                            'label' => 'lang:thoughtco.reports::default.label_column',
+                            'type' => 'select',
+                            'options' => [
+                                'all' => 'lang:admin::lang.locations.text_all_orders',
+                                'below' => 'lang:admin::lang.locations.text_below_order_total',
+                                'above' => 'lang:admin::lang.locations.text_above_order_total',
+                            ],
+                        ],
+                    ],
+                ],
+            ],            
+            'csv_columns' => [
+                'label' => 'lang:thoughtco.reports::default.label_csv_cols',
+                'type' => 'repeater',
+                'sortable' => TRUE,
+                'commentAbove' => 'lang:thoughtco.reports::default.help_csv_cols',
+                'form' => [
+                    'fields' => [
+                        'priority' => [
+                            'type' => 'hidden',
+                        ],
+                        'column' => [
+                            'label' => 'lang:thoughtco.reports::default.label_column',
+                            'type' => 'select',
+                            'options' => [
+                                'all' => 'lang:admin::lang.locations.text_all_orders',
+                                'below' => 'lang:admin::lang.locations.text_below_order_total',
+                                'above' => 'lang:admin::lang.locations.text_above_order_total',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
 		],
     ],
 ];

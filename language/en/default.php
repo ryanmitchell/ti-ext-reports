@@ -6,13 +6,19 @@ return [
     'btn_view' => 'View',
     
     'column_title' => 'Title',
-
+    
+    'help_csv_cols' => 'The columns that appear in any CSV exports',
+    'help_list_cols' => 'The columns that appear in the admin list view',
+    
     'label_end_date' => 'End Date',
     'label_location' => 'Location',
     'label_start_date' => 'Start Date',
     
     'label_title' => 'Title',
     'label_rules' => 'Rules',
+    'label_csv_cols' => 'Export (CSV) columns',
+    'label_list_cols' => 'Listing columns',
+    'label_column' => 'Column',
     
     'qb' => [
         

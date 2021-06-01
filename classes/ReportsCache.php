@@ -8,6 +8,7 @@ use Admin\Models\Customers_model;
 use Admin\Models\Locations_model;
 use Admin\Models\Menus_model;
 use Admin\Models\Orders_model;
+use Admin\Models\Payments_model;
 use Carbon\Carbon;
 use DB;
 use Igniter\Flame\Currency;
@@ -321,14 +322,13 @@ class ReportsCache {
 		];
 
 		// get payment methods for this location
-		$paymentMethods = $locationModel ? $locationModel
-		->listAvailablePayments()
-		->map(function($method) {
-			return (object)[
-				'name' => $method->name,
-				'code' => $method->code,
-			];
-		}) : collect([]);
+		$paymentMethods = ($locationModel ? $locationModel->listAvailablePayments() : Payments_model::all())
+			->map(function($method) {
+				return (object)[
+					'name' => $method->name,
+					'code' => $method->code,
+				];
+			});
 
 		$paymentMethodCount = $paymentMethods->count();
 		$paymentMethodIndex = 0;
