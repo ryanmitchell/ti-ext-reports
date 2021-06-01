@@ -81,9 +81,12 @@ return [
 		                    [
 		                        'id' => 'customer.group',
 		                        'label' => lang('thoughtco.reports::default.qb.label_customer_group'),
-		                        'type' => 'integer',
+		                        'type' => 'string',
 		                        'input' => 'select',
 		                        'values' => \Admin\Models\Customer_groups_model::getDropdownOptions(),
+                                'operators' => [
+                                    'equal', 'not_equal', 
+                                ],                            
 		                    ],
 		                    [
 		                        'id' => 'customer.lastorder',
@@ -99,7 +102,33 @@ return [
                                     'todayHighlight' => true,
                                     'autoclose' => true,
                                 ],
+                                'operators' => [
+                                    'equal', 'not_equal', 
+                                    'less', 'less_or_equal', 
+                                    'greater', 'greater_or_equal', 
+                                ],                                    
 		                    ],
+		                    [
+		                        'id' => 'customer.joined',
+		                        'label' => lang('thoughtco.reports::default.qb.label_customer_joined'),
+		                        'type' => 'date',
+                                'validation' => [
+                                    'format' => 'YYYY/MM/DD',
+                                ],
+                                'plugin' => 'datepicker',
+                                'plugin_config' => [
+                                    'format' => 'yyyy/mm/dd',
+                                    'todayBtn' => 'linked',
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                ],
+                                'operators' => [
+                                    'equal', 'not_equal', 
+                                    'less', 'less_or_equal', 
+                                    'greater', 'greater_or_equal', 
+                                ],                                    
+		                    ],                            
+                            
 		                ] 
 		            ],
 		            '\Admin\Models\Orders_model' => [
@@ -107,11 +136,103 @@ return [
 		                'filters' => [
 		                    [
 		                        'id' => 'orders.location',
-		                        'label' => 'Location',
+		                        'label' => lang('thoughtco.reports::default.qb.label_location'),
 		                        'type' => 'integer',
 		                        'input' => 'select',
 		                        'values' => \AdminLocation::listLocations(),
-		                    ],                    
+		                    ],   
+		                    [
+		                        'id' => 'customer.name',
+		                        'label' => lang('thoughtco.reports::default.qb.label_customer_name'),
+		                        'type' => 'string',
+		                    ],
+		                    [
+		                        'id' => 'customer.email',
+		                        'label' => lang('thoughtco.reports::default.qb.label_customer_email'),
+		                        'type' => 'string',
+		                    ],
+		                    [
+		                        'id' => 'customer.group',
+		                        'label' => lang('thoughtco.reports::default.qb.label_customer_group'),
+		                        'type' => 'integer',
+		                        'input' => 'select',
+		                        'values' => \Admin\Models\Customer_groups_model::getDropdownOptions(),
+		                    ],
+		                    [
+		                        'id' => 'orders.startdate',
+		                        'label' => lang('thoughtco.reports::default.qb.label_orders_startdate'),
+		                        'type' => 'date',
+                                'validation' => [
+                                    'format' => 'YYYY/MM/DD',
+                                ],
+                                'plugin' => 'datepicker',
+                                'plugin_config' => [
+                                    'format' => 'yyyy/mm/dd',
+                                    'todayBtn' => 'linked',
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                ],
+                                'operators' => [
+                                    'equal', 'not_equal', 
+                                    'less', 'less_or_equal', 
+                                    'greater', 'greater_or_equal', 
+                                ],                                    
+		                    ],
+		                    [
+		                        'id' => 'orders.enddate',
+		                        'label' => lang('thoughtco.reports::default.qb.label_orders_enddate'),
+		                        'type' => 'date',
+                                'validation' => [
+                                    'format' => 'YYYY/MM/DD',
+                                ],
+                                'plugin' => 'datepicker',
+                                'plugin_config' => [
+                                    'format' => 'yyyy/mm/dd',
+                                    'todayBtn' => 'linked',
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                ],
+                                'operators' => [
+                                    'equal', 'not_equal', 
+                                    'less', 'less_or_equal', 
+                                    'greater', 'greater_or_equal', 
+                                ],                                
+		                    ],  
+		                    [
+		                        'id' => 'orders.type',
+		                        'label' => lang('thoughtco.reports::default.qb.label_orders_type'),
+		                        'type' => 'string',
+		                        'input' => 'select',
+		                        'values' => \AdminLocation::listLocations(),
+		                    ],
+		                    [
+		                        'id' => 'orders.deliveryaddress',
+		                        'label' => lang('thoughtco.reports::default.qb.label_orders_address'),
+		                        'type' => 'string',
+                                'operators' => [
+                                    'contains', 'not_contains',    
+                                ],                                
+		                    ], 
+		                    [
+		                        'id' => 'orders.categories',
+		                        'label' => lang('thoughtco.reports::default.qb.label_orders_categories'),
+		                        'type' => 'string',
+		                        'input' => 'select',
+		                        'values' => \Admin\Models\Categories_model::getDropdownOptions(),
+                                'operators' => [
+                                    'contains', 'not_contains',   
+                                ],
+		                    ],                            
+		                    [
+		                        'id' => 'orders.menus',
+		                        'label' => lang('thoughtco.reports::default.qb.label_orders_menus'),
+		                        'type' => 'string',
+		                        'input' => 'select',
+		                        'values' => \Admin\Models\Menus_model::all()->pluck('menu_name', 'menu_id'),
+                                'operators' => [
+                                    'contains', 'not_contains',   
+                                ],
+		                    ],                                               
 		                ]
 		            ]
 		        ],

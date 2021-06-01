@@ -18,8 +18,18 @@ return [
         'label_customers' => 'Customers',
         'label_customer_email' => 'Email',
         'label_customer_group' => 'Customer group',
-        'label_customer_lastorder' => 'Last order',
+        'label_customer_joined' => 'Joined date',
+        'label_customer_lastorder' => 'Last order date',
         'label_customer_name' => 'Name',
+        
+        'label_location' => 'Location',
+        
+        'label_orders_categories' => 'Menu item categories',
+        'label_orders_enddate' => 'To date',
+        'label_orders_menus' => 'Menu items',
+        'label_orders_startdate' => 'From date',
+        'label_orders_type' => 'Type',
+        'label_orders_address' => 'Address',
         
         'text_title' => 'Query Builder',  
     ],
