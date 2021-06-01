@@ -40,9 +40,9 @@ class QueryBuilder extends BaseFormWidget
         $this->addCss('~/app/admin/formwidgets/datepicker/assets/vendor/datepicker/bootstrap-datepicker.min.css', 'bootstrap-datepicker-css');
         $this->addJs('~/app/admin/formwidgets/datepicker/assets/vendor/datepicker/bootstrap-datepicker.min.js', 'bootstrap-datepicker-js');
         $this->addCss('~/app/admin/formwidgets/datepicker/assets/css/datepicker.css', 'datepicker-css');
-        
+
         $this->addJs('https://cdn.jsdelivr.net/npm/jQuery-QueryBuilder@2.6.0/dist/js/query-builder.standalone.js', 'jquery-builder-js');
-        $this->addCss('https://cdn.jsdelivr.net/npm/jQuery-QueryBuilder@2.6.0/dist/css/query-builder.default.min.css', 'jquery-builder-css');
+        $this->addCss('css/querybuilder.css', 'jquery-builder-css');
 
         $this->addJs('js/querybuilder.js', 'querybuilder-js');
     }
