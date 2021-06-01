@@ -1,6 +1,6 @@
 <div
     id="{{ $dataTableId }}"
-    class="field-datatable size-{{ $size }}"
+    class="field-datatable w-100 size-{{ $size }}"
     data-control="datatable"
 >
 

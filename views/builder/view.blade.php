@@ -1,5 +1,11 @@
 <div class="row-fluid">
 
-    {!! $datatable->render() !!}
+    <div id="form-outside-tabs">
+        <div class="form-fields">
+
+        {!! $datatable->render() !!}
+        
+        </div>
+    </div>
 
 </div>
