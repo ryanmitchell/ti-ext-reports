@@ -5,6 +5,7 @@ namespace Thoughtco\Reports\Controllers;
 use AdminMenu;
 use Admin\Facades\AdminLocation;
 use ApplicationException;
+use Thoughtco\Reports\Models\QueryBuilder;
 
 class Builder extends \Admin\Classes\AdminController
 {
@@ -52,5 +53,22 @@ class Builder extends \Admin\Classes\AdminController
     {
         parent::__construct();
         AdminMenu::setContext('reports', 'builder');
+    }
+    
+    public function view($context, $id)
+    {
+        if (!($model = QueryBuilder::find($id)))
+            abort(404);    
+        
+        $klass = new $model->builderjson['model'];
+        
+        foreach ($model->builderjson['rules']['rules'] as $rule)
+        {
+            $klass->where('email', 'ryan@rt.to');
+        }
+        
+        dd($klass->get());
+        exit();
+        
     }
 }

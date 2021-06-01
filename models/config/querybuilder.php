@@ -28,6 +28,14 @@ return [
                 'type' => 'text',
                 'sortable' => TRUE,
             ],
+            'link' => [
+                'label' => '',
+                'type' => 'text',
+                'valueFrom' => 'id',
+                'formatter' => function($record, $column, $value) {
+                    return '<a class="btn btn-primary" href="'.admin_url('thoughtco/reports/builder/view/'.$value).'">'.lang('thoughtco.reports::default.btn_view').'</a>';    
+                },                
+            ],
         ],
     ],
 
@@ -57,22 +65,44 @@ return [
                 'label' => 'lang:thoughtco.reports::default.label_rules',
                 'type' => 'querybuilder',
 				'filters' => [
-		            'customers' => [
-		                'label' => 'Customers',
+		            '\Admin\Models\Customers_model' => [
+		                'label' => lang('thoughtco.reports::default.qb.label_customers'),
 		                'filters' => [
 		                    [
 		                        'id' => 'customer.name',
-		                        'label' => 'Customer name',
+		                        'label' => lang('thoughtco.reports::default.qb.label_customer_name'),
 		                        'type' => 'string',
 		                    ],
 		                    [
 		                        'id' => 'customer.email',
-		                        'label' => 'Customer email',
+		                        'label' => lang('thoughtco.reports::default.qb.label_customer_email'),
 		                        'type' => 'string',
-		                    ],  
+		                    ],
+		                    [
+		                        'id' => 'customer.group',
+		                        'label' => lang('thoughtco.reports::default.qb.label_customer_group'),
+		                        'type' => 'integer',
+		                        'input' => 'select',
+		                        'values' => \Admin\Models\Customer_groups_model::getDropdownOptions(),
+		                    ],
+		                    [
+		                        'id' => 'customer.lastorder',
+		                        'label' => lang('thoughtco.reports::default.qb.label_customer_lastorder'),
+		                        'type' => 'date',
+                                'validation' => [
+                                    'format' => 'YYYY/MM/DD',
+                                ],
+                                'plugin' => 'datepicker',
+                                'plugin_config' => [
+                                    'format' => 'yyyy/mm/dd',
+                                    'todayBtn' => 'linked',
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                ],
+		                    ],
 		                ] 
 		            ],
-		            'orders' => [
+		            '\Admin\Models\Orders_model' => [
 		                'label' => 'Orders',
 		                'filters' => [
 		                    [

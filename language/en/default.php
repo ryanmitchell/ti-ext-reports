@@ -14,6 +14,13 @@ return [
     'label_rules' => 'Rules',
     
     'qb' => [
+        
+        'label_customers' => 'Customers',
+        'label_customer_email' => 'Email',
+        'label_customer_group' => 'Customer group',
+        'label_customer_lastorder' => 'Last order',
+        'label_customer_name' => 'Name',
+        
         'text_title' => 'Query Builder',  
     ],
 

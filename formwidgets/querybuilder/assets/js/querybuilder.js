@@ -20,12 +20,18 @@
     tastyQueryBuilder.prototype.constructor = tastyQueryBuilder
 
     tastyQueryBuilder.prototype.init = function () {
-        
         this.$selectElement = this.$el.find('.querybuilder-options-select');
         this.$selectElement.on('change', $.proxy(this.onOptionChange, this));
-        
+
         this.$inputElement = this.$el.find('textarea');
-        
+ 
+        this.$value = { model: '' };
+        if (this.$el.data('value')) {
+            this.$value = this.$el.data('value');
+            if (this.$value.model)
+                this.$selectElement.val(this.$value.model);
+        }
+
         this.makeBuilder();
     }
     
@@ -33,22 +39,41 @@
         
         let opts = JSON.parse(JSON.stringify(this.options));
         opts.filters = opts.filters[this.$selectElement[0].value].filters;
+        opts.plugins = [];
+        opts.rules = this.$value.model == this.$selectElement[0].value ? this.$value.rules : false;
                 
-        this.$builderElement = this.$el.find('.querybuilder')
+        var $builderElement;
+        this.$builderElement = $builderElement = this.$el.find('.querybuilder');
+        
+        this.$builderElement.on('afterUpdateRuleValue.queryBuilder', function(e, rule) {
+            if (rule.filter.plugin === 'datepicker') {
+                rule.$el.find('.rule-value-container input').datepicker('update');
+            }
+        });
+        
         this.$builderElement.queryBuilder(opts);
         
         var inputElement = this.$inputElement;
         var builderElement = this.$builderElement[0].queryBuilder;
         
-        var ignoreNextEvent = false;
-        builderElement.on('beforeDestroy', function(){
-           ignoreNextEvent = true;   
-        });
+        this.$ignoreNextEvent = false;
+        builderElement.on('beforeDestroy', $.proxy(function(){
+           this.$ignoreNextEvent = true;   
+        }, this));
         
-        builderElement.on('rulesChanged', function(){
-            inputElement.val(JSON.stringify(ignoreNextEvent ? [] : builderElement.getRules()));   
-        });
+        builderElement.$el.removeClass('form-inline').addClass('form-block');  
+        
+        builderElement.on('rulesChanged', $.proxy(this.onRulesChanged, this));
+        this.onRulesChanged();
 
+    }
+    
+    tastyQueryBuilder.prototype.onRulesChanged = function() {
+        let val = {
+            model: this.$selectElement.val(),
+            rules: (this.$ignoreNextEvent ? [] : this.$builderElement.queryBuilder('getRules'))
+        };
+        this.$inputElement.val(JSON.stringify(val));   
     }
     
     tastyQueryBuilder.prototype.onOptionChange = function() {
