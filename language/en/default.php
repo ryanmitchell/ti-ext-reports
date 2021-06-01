@@ -2,6 +2,7 @@
 
 return [
 
+    'btn_csv' => 'Export CSV',
     'btn_view' => 'View',
     
     'column_title' => 'Title',
