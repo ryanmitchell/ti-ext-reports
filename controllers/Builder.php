@@ -5,10 +5,12 @@ namespace Thoughtco\Reports\Controllers;
 use AdminMenu;
 use Admin\Facades\AdminLocation;
 use ApplicationException;
+use Event;
 use Thoughtco\Reports\Models\QueryBuilder;
+use Thoughtco\Reports\Parser\QueryBuilderParser;
 
 class Builder extends \Admin\Classes\AdminController
-{
+{    
     public $implement = [
         'Admin\Actions\FormController',
         'Admin\Actions\ListController',
@@ -60,14 +62,48 @@ class Builder extends \Admin\Classes\AdminController
         if (!($model = QueryBuilder::find($id)))
             abort(404);    
         
-        $klass = new $model->builderjson['model'];
+        $klass = new $model->builderjson['model']();
         
-        foreach ($model->builderjson['rules']['rules'] as $rule)
+        // some fields require extending query
+        Event::listen('thoughtco.reports.fieldToQuery', function ($controller, $query, $field, $operator, $value, $condition) 
         {
-            $klass->where('email', 'ryan@rt.to');
-        }
+            if ($field == 'orders.categories') {
+                
+                $value = \Admin\Models\Menus_model::whereHas('categories', function($query) use ($value) {
+                    $query->where('categories.category_id', $value);
+                })->pluck('menu_id');
+                               
+                $query->join('order_menus', 'order_menus.order_id', '=', 'orders.order_id');
+                return $query->where(function($query) use ($operator, $value) {
+                    foreach ($value as $val)
+                        $query->orWhere('order_menus.menu_id', $operator, $val);
+                }, $condition);
+
+            }
+            
+            if ($field == 'orders.customer_group') {
+                return $query->whereHas('customer', function($query) {
+                    return $query->where('customer_group_id', $operator, $value);
+                }, $condition);
+            }
+            
+            if ($field == 'orders.customer_name') {
+                return $query->whereRaw('CONCAT(first_name, " ", last_name) '.$operator.' ?', [$value], $condition);    
+            }
+            
+            if ($field == 'orders.menus') {
+                $query->join('order_menus', 'order_menus.order_id', '=', 'orders.order_id');
+                return $query->where('order_menus.menu_id', $operator, $value, $condition);
+            }
+            
+        });
         
-        dd($klass->get());
+        $parser = new QueryBuilderParser();
+        
+        $table = $klass->newQuery();
+        $query = $parser->parse(json_encode($model->builderjson['rules']), $table);
+
+        dd($rows = $query->get());
         exit();
         
     }
