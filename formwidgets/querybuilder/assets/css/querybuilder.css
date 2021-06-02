@@ -171,3 +171,7 @@
   border: 1px dashed #BBB;
   opacity: .7;
 }
+
+.query-builder .select2-selection {
+  padding-right: 30px;
+}

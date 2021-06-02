@@ -51,6 +51,8 @@
             if (rule.filter.plugin === 'datepicker') {
                 rule.$el.find('.rule-value-container input').datepicker('update');
             }
+            
+            rule.$el.find('select').select2();
         });
         
         this.$builderElement.queryBuilder(opts);
