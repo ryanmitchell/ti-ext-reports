@@ -1,4 +1,4 @@
-<?php namespace Thoughtco\Printer\Database\Migrations;
+<?php namespace Thoughtco\Reports\Database\Migrations;
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,7 +16,7 @@ class ReportTables extends Migration
             $table->mediumText('list_columns');
             $table->mediumText('csv_columns');
             $table->timestamps();
-        });                
+        });
     }
 
     public function down()
