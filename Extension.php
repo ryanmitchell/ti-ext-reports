@@ -25,6 +25,10 @@ class Extension extends BaseExtension
                 'label' => 'lang:thoughtco.reports::default.qb.text_title',
                 'code' => 'querybuilder',
             ],
+            'Thoughtco\Reports\FormWidgets\ReportsTable' => [
+                'label' => 'lang:thoughtco.reports::default.qb.text_reportstable',
+                'code' => 'reportstable',
+            ],
         ];
     }
     

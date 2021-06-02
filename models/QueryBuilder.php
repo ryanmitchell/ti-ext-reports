@@ -18,6 +18,8 @@ class QueryBuilder extends Model
 
     public $casts = [
         'builderjson' => 'array',
+        'list_columns' => 'array',
+        'csv_columns' => 'array',
     ];
     
     protected $fillable = ['title', 'builderjson'];

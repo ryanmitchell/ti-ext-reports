@@ -61,6 +61,12 @@ class Builder extends \Admin\Classes\AdminController
         AdminMenu::setContext('reports', 'builder');
     }
     
+    public function edit($context, $id) 
+    {
+        parent::edit($context, $id);
+        $this->addJs('~/extensions/thoughtco/reports/assets/js/editing.js', 'querybuilder-editing-js');
+    }
+    
     public function view($context, $id)
     {
         if (!($model = QueryBuilder::find($id)))
@@ -69,6 +75,10 @@ class Builder extends \Admin\Classes\AdminController
         // some fields require extending query
         Event::listen('thoughtco.reports.fieldToQuery', function ($controller, $query, $field, $operator, $value, $condition) 
         {
+            // we only care about certain models by default - this allows others to extend
+            if (!in_array(get_class($query->getModel()), ['Admin\Models\Orders_model', 'Admin\Models\Customers_model']))
+                return;
+            
             if ($field == 'customers.orderdate') {
                 return $query->whereHas('orders', function($query) {
                     return $query->where('orders.order_date', $operator, $value);
@@ -111,20 +121,11 @@ class Builder extends \Admin\Classes\AdminController
             }
             
         });
-        
-        // need to make these configurable
-        $columns = [
-            'order_id' => [
-                'title' => 'lang:admin::lang.orders.column_time_date',
-            ],
-            'first_name' => [
-                'title' => 'lang:admin::lang.label_status',
-            ],
-            'last_name' => [
-                'title' => 'lang:admin::lang.orders.column_comment',
-            ],
-        ];
-            
+
+        // default sort
+       // $sort = ['orders.order_id', 'desc'];
+         
+        // csv export   
         if ($csv = request()->input('csv')) {
             
             $klass = new $model->builderjson['model']();
@@ -133,16 +134,21 @@ class Builder extends \Admin\Classes\AdminController
             $table = $klass->newQuery();
             $query = $parser->parse(json_encode($model->builderjson['rules']), $table);
             $data = $query->get();
-
-            $columns = collect($columns)
-                ->keys()
-                ->toArray();
-
-            $data = $data->map(function($row) use ($columns) { 
-                return $row->only($columns);
-            });
+                
+            $csv_columns = [];
+            $csv_headings = [];
+            foreach ($model->csv_columns as $list_col) {
+                $col = json_decode($list_col['column'], true);
+                $csv_columns[] = $col['key'];
+                $csv_headings[] = $list_col['label'];
+            }
+                        
+            $data = $data->map(function($row) use ($csv_columns) { 
+                return $row->only($csv_columns);
+            })->sortBy($csv_columns[0]);
             
             $writer = Writer::createFromString();
+            $writer->insertOne($csv_headings);
             $writer->insertAll(new \ArrayIterator($data->toArray()));
             
             echo $writer->getContent();
@@ -152,6 +158,17 @@ class Builder extends \Admin\Classes\AdminController
             
         Template::setTitle($model->title);
         
+        $list_columns = [];
+        $sort_column = '';
+        foreach ($model->list_columns as $list_col) {
+            $col = json_decode($list_col['column'], true);
+            $list_columns[$col['key']] = [
+                'title' => $list_col['label'],
+            ];
+            if ($sort_column == '')
+                $sort_column = $col['key'];
+        }
+                        
         $this->vars['datatable'] = $this->makeFormWidget('Thoughtco\Reports\FormWidgets\ReportsTable', (object)[
             'fieldName' => 'report',
             'valueFrom' => '',
@@ -159,10 +176,10 @@ class Builder extends \Admin\Classes\AdminController
             'attributes' => [
                 'model' => $model,
             ],
-            'columns' => $columns,
+            'columns' => $list_columns,
             'useAjax' => TRUE,
-            'defaultSort' => ['orders.order_id', 'desc'],
-            'searchableFields' => ['first_name'],
+            'defaultSort' => [$sort_column, 'asc'],
+            'searchableFields' => array_keys($list_columns),
             'showRefreshButton' => TRUE,
         ]);
         

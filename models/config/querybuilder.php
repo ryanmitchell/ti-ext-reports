@@ -1,5 +1,22 @@
 <?php
 
+$output_options = [
+    json_encode([
+        'key' => 'customer_name',
+        'contexts' => [
+            '\Admin\Models\Customers_model',    
+            '\Admin\Models\Orders_model',    
+        ],
+    ]) => 'lang:thoughtco.reports::default.qb.label_customer_name',
+    json_encode([
+        'key' => 'email',
+        'contexts' => [
+            '\Admin\Models\Customers_model',    
+            '\Admin\Models\Orders_model',    
+        ],
+    ]) => 'lang:thoughtco.reports::default.qb.label_customer_email',
+];
+
 return [
     'list' => [
         'toolbar' => [
@@ -247,11 +264,11 @@ return [
                         'column' => [
                             'label' => 'lang:thoughtco.reports::default.label_column',
                             'type' => 'select',
-                            'options' => [
-                                'all' => 'lang:admin::lang.locations.text_all_orders',
-                                'below' => 'lang:admin::lang.locations.text_below_order_total',
-                                'above' => 'lang:admin::lang.locations.text_above_order_total',
-                            ],
+                            'options' => $output_options,
+                        ],
+                        'label' => [
+                            'label' => 'lang:thoughtco.reports::default.label_label',
+                            'type' => 'text',
                         ],
                     ],
                 ],
@@ -269,12 +286,12 @@ return [
                         'column' => [
                             'label' => 'lang:thoughtco.reports::default.label_column',
                             'type' => 'select',
-                            'options' => [
-                                'all' => 'lang:admin::lang.locations.text_all_orders',
-                                'below' => 'lang:admin::lang.locations.text_below_order_total',
-                                'above' => 'lang:admin::lang.locations.text_above_order_total',
-                            ],
+                            'options' => $output_options
                         ],
+                        'label' => [
+                            'label' => 'lang:thoughtco.reports::default.label_label',
+                            'type' => 'text',
+                        ],                        
                     ],
                 ],
             ],

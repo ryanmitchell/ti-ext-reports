@@ -174,4 +174,5 @@
 
 .query-builder .select2-selection {
   padding-right: 30px;
+  min-width: 120px;
 }
