@@ -1,6 +1,6 @@
 ## Reports
 
-Adds a report view to the sales menu allowing high level stats on a date range.
+Add reporting and data interrogation to your TastyIgniter install.
 
 ### Installation
 
