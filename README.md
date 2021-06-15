@@ -47,7 +47,7 @@ Event::listen('admin.form.extendFieldsBefore', function (Form $form) {
 });
 ```
 
-### Extending queries
+### Extending where fields
 
 Through your extension add rules by listening for the core `thoughtco.reports.fieldToQuery` event, and apply logic on the basis of the $field and $controller . For example:
 
@@ -60,6 +60,22 @@ Event::listen('thoughtco.reports.fieldToQuery', function ($controller, $query, $
 	if ($field == 'customers.loyaltypoints') {
 		$query->where('loyalty_points', $operator, $value);	
 	}
+
+});
+```
+
+### Extending overall query
+
+Through your extension add rules by listening for the core `extendQuery` event, and apply logic on the basis of the $query, $modelName and $controller . For example:
+
+```php
+Event::listen('thoughtco.reports.extendQuery', function($controller, $query, $modelName) {
+                        
+	// we only care about certain models by default - this allows others to extend
+	if (!in_array($modelName, ['\Admin\Models\Orders_model', '\Admin\Models\Customers_model']))
+		return;
+                
+	$query->selectRaw('*, CONCAT(first_name, " ", last_name) as customer_name');
 
 });
 ```

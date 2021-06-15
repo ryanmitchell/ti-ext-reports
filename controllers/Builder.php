@@ -72,7 +72,7 @@ class Builder extends \Admin\Classes\AdminController
         if (!($model = QueryBuilder::find($id)))
             abort(404);  
             
-        // some fields require extending query
+        // some fields require extending the where
         Event::listen('thoughtco.reports.fieldToQuery', function ($controller, $query, $field, $operator, $value, $condition) 
         {
             // we only care about certain models by default - this allows others to extend
@@ -83,6 +83,16 @@ class Builder extends \Admin\Classes\AdminController
                 return $query->whereHas('orders', function($query) {
                     return $query->where('orders.order_date', $operator, $value);
                 }, $condition);                
+            }
+            
+            if ($field == 'date_added_relative') {
+                $value = strtotime('-'.$value.' days');
+                return $query->where('date_added', $operator, date('Y-m-d H:i:s', $value), $condition);
+            }
+            
+            if ($field == 'order_date_relative') {
+                $value = strtotime('-'.$value.' days');
+                return $query->where('order_date', $operator, date('Y-m-d', $value), $condition);
             }
             
             if ($field == 'orders.categories') {
@@ -120,10 +130,28 @@ class Builder extends \Admin\Classes\AdminController
                 return $query->where('order_menus.menu_id', $operator, $value, $condition);
             }
             
+            // catch-all
+            return $query->where($field, $operator, $value, $condition);
+            
         });
-
-        // default sort
-       // $sort = ['orders.order_id', 'desc'];
+        
+        // some require extending the overall query
+        Event::listen('thoughtco.reports.extendQuery', function($controller, $query, $modelName) {
+                        
+            // we only care about certain models by default - this allows others to extend
+            if (!in_array($modelName, ['\Admin\Models\Orders_model', '\Admin\Models\Customers_model']))
+                return;
+                
+            $query->selectRaw('*, CONCAT(first_name, " ", last_name) as customer_name');
+            
+            if ($modelName == '\Admin\Models\Customers_model') {
+                
+                $query->leftJoin('addresses', 'addresses.address_id', 'customers.address_id');
+                $query->selectRaw('CONCAT(address_1, " ", address_2, " ", city, " ", state, " ", postcode) as customer_address');
+                
+            }
+            
+        });
          
         // csv export   
         if ($csv = request()->input('csv')) {

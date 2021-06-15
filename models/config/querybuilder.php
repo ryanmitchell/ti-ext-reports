@@ -15,6 +15,30 @@ $output_options = [
             '\Admin\Models\Orders_model',    
         ],
     ]) => 'lang:thoughtco.reports::default.qb.label_customer_email',
+    json_encode([
+        'key' => 'order_total',
+        'contexts' => [
+            '\Admin\Models\Orders_model',    
+        ],
+    ]) => 'lang:admin::lang.orders.label_order_total',
+    json_encode([
+        'key' => 'order_date',
+        'contexts' => [
+            '\Admin\Models\Orders_model',    
+        ],
+    ]) => 'lang:admin::lang.orders.label_order_date',
+    json_encode([
+        'key' => 'order_type',
+        'contexts' => [
+            '\Admin\Models\Orders_model',    
+        ],
+    ]) => 'lang:admin::lang.orders.label_order_type',
+    json_encode([
+        'key' => 'customer_address',
+        'contexts' => [
+            '\Admin\Models\Customers_model',    
+        ],
+    ]) => 'lang:admin::lang.orders.label_delivery_address',    
 ];
 
 return [
@@ -142,7 +166,23 @@ return [
                                     'greater', 'greater_or_equal',
                                 ],
 		                    ],
-
+		                    [
+		                        'id' => 'date_added_relative',
+		                        'label' => lang('thoughtco.reports::default.qb.label_customer_joined_relative'),
+		                        'input' => 'select',
+                                'values' => [
+                                    '7' => lang('thoughtco.reports::default.qb.value_date_relative_7'),
+                                    '14' => lang('thoughtco.reports::default.qb.value_date_relative_14'),
+                                    '30' => lang('thoughtco.reports::default.qb.value_date_relative_30'),
+                                    '90' => lang('thoughtco.reports::default.qb.value_date_relative_90'),
+                                    '365' => lang('thoughtco.reports::default.qb.value_date_relative_365'),
+                                ],
+                                'operators' => [
+                                    'equal', 'not_equal',
+                                    'less', 'less_or_equal',
+                                    'greater', 'greater_or_equal',
+                                ],
+		                    ],
 		                ]
 		            ],
 		            '\Admin\Models\Orders_model' => [
@@ -193,6 +233,23 @@ return [
                                 ],
 		                    ],
 		                    [
+		                        'id' => 'order_date_relative',
+		                        'label' => lang('thoughtco.reports::default.qb.label_orders_date_relative'),
+		                        'input' => 'select',
+                                'values' => [
+                                    '7' => lang('thoughtco.reports::default.qb.value_date_relative_7'),
+                                    '14' => lang('thoughtco.reports::default.qb.value_date_relative_14'),
+                                    '30' => lang('thoughtco.reports::default.qb.value_date_relative_30'),
+                                    '90' => lang('thoughtco.reports::default.qb.value_date_relative_90'),
+                                    '365' => lang('thoughtco.reports::default.qb.value_date_relative_365'),
+                                ],
+                                'operators' => [
+                                    'equal', 'not_equal',
+                                    'less', 'less_or_equal',
+                                    'greater', 'greater_or_equal',
+                                ],
+		                    ],
+		                    [
 		                        'id' => 'order_date',
 		                        'label' => lang('thoughtco.reports::default.qb.label_orders_date'),
 		                        'type' => 'date',
@@ -217,7 +274,7 @@ return [
 		                        'label' => lang('thoughtco.reports::default.qb.label_orders_type'),
 		                        'type' => 'string',
 		                        'input' => 'select',
-                                'options' => ['Admin\Models\Locations_model', 'getOrderTypeOptions'],
+                                'values' => ['Admin\Models\Locations_model', 'getOrderTypeOptions'],
 		                    ],
 		                    [
 		                        'id' => 'orders.delivery_address',

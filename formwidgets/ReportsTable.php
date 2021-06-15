@@ -21,9 +21,7 @@ class ReportsTable extends \Admin\FormWidgets\DataTable
         $table = $klass->newQuery();
         $query = $parser->parse(json_encode($model->builderjson['rules']), $table);
         
-        if ($csv = request()->input('csv')) {
-            echo 'Use Excel Lib'; exit();
-        }
+        $this->fireSystemEvent('thoughtco.reports.extendQuery', [$query, $model->builderjson['model']] );
         
         if (strlen($search)) {
             $query->search($search, $this->searchableFields);
@@ -33,7 +31,7 @@ class ReportsTable extends \Admin\FormWidgets\DataTable
             [$sortColumn, $sortBy] = $this->defaultSort;
             $query->orderBy($sortColumn, $sortBy);
         }
-
+        
         $page = ($offset / $limit) + 1;
 
         return $query->paginate($limit, ['*'], 'page', $page);
