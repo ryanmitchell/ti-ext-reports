@@ -1,0 +1,8 @@
+{
+  "name": "thoughtco/reports",
+  "type": "tastyigniter-extension",
+  "keywords": ["tastyigniter", "reports"],
+  "require": {
+    "league/csv": "^9.0"
+  }
+}

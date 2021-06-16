@@ -1,13 +1,53 @@
 <?php
 
 return [
-    'text_title' => 'Reports',
 
+    'btn_csv' => 'Export CSV',
     'btn_view' => 'View',
-
+    
+    'column_title' => 'Title',
+    
+    'help_csv_cols' => 'The columns that appear in any CSV exports',
+    'help_list_cols' => 'The columns that appear in the admin list view',
+    
     'label_end_date' => 'End Date',
     'label_location' => 'Location',
     'label_start_date' => 'Start Date',
+    
+    'label_title' => 'Title',
+    'label_rules' => 'Rules',
+    'label_csv_cols' => 'Export (CSV) columns',
+    'label_list_cols' => 'Listing columns',
+    'label_column' => 'Column',
+    
+    'qb' => [
+        
+        'label_customers' => 'Customers',
+        'label_customer_email' => 'Email',
+        'label_customer_group' => 'Customer group',
+        'label_customer_joined' => 'Joined date',
+        'label_customer_name' => 'Name',
+        'label_customer_orderdate' => 'Order date',
+        
+        'label_location' => 'Location',
+        
+        'label_orders_categories' => 'Menu item categories',
+        'label_orders_menus' => 'Menu items',
+        'label_orders_date' => 'Order date',
+        'label_orders_added' => 'Added date',
+        'label_orders_type' => 'Type',
+        'label_orders_address' => 'Address',
+        
+        'text_title' => 'Query Builder',  
+    ],
+
+    'text_builder_title' => 'Builder',
+    'text_dashboard_title' => 'Dashboard',
+    'text_title' => 'Reports',
+    
+    'text_builder_empty' => 'No reports defined',
+    'text_builder_title' => 'Query Builder',
+    'text_builder_form' => 'Build Query',
 
     'text_total_sales' => 'Total Sales',
     'text_total_orders' => 'Total Orders',
