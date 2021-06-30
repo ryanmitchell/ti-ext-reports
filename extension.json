@@ -2,7 +2,7 @@
   "code": "thoughtco.reports",
   "name": "Reports",
   "description": "Provides reporting on your restaurant, such as daily sales, quantity of items sold, top customers, top items.",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "ryanmitchell",
   "icon": {
     "class": "fa fa-chart-pie",
