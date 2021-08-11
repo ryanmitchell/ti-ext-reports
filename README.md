@@ -2,6 +2,8 @@
 
 Add reporting and data interrogation to your TastyIgniter install.
 
+This is free and doesn't require a license, but you can [donate to Ryan](https://github.com/sponsors/ryanmitchell), the developer behind it, to show your appreciation.
+
 ### Installation
 
 1. Add to extensions/thoughtco/reports inside Tasty Igniter install.
