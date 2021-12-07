@@ -50,60 +50,60 @@ class ReportTables extends Migration
 		},
 		"list_columns": [{
 			"priority": 0,
-			"column": {
-				"key": "email",
-				"contexts": ["\\\\Admin\\\\Models\\\\Customers_model", "\\\\Admin\\\\Models\\\\Orders_model"]
-			},
+			"column": "{
+                \"key\": \"email\",
+                \"contexts"\: [\"\\\\Admin\\\\Models\\\\Customers_model\", \"\\\\Admin\\\\Models\\\\Orders_model\"]
+			}",
 			"label": "Email"
 		}, {
 			"priority": 1,
-			"column": {
-				"key": "customer_name",
-				"contexts": ["\\\\Admin\\\\Models\\\\Customers_model", "\\\\Admin\\\\Models\\\\Orders_model"]
-			},
+			"column": "{
+                \"key\": \"customer_name\",
+                \"contexts\": [\"\\\\Admin\\\\Models\\\\Customers_model\", \"\\\\Admin\\\\Models\\\\Orders_model\"]
+			}",
 			"label": "Name"
 		}, {
 			"priority": 2,
-			"column": {
-				"key": "order_total",
-				"contexts": ["\\\\Admin\\\\Models\\\\Orders_model"]
-			},
+			"column": "{
+                \"key\": \"order_total"\,
+                \"contexts\": [\"\\\\Admin\\\\Models\\\\Orders_model\"]
+			}",
 			"label": "Order Total"
 		}, {
 			"priority": 3,
-			"column": {
-				"key": "order_date",
-				"contexts": ["\\\\Admin\\\\Models\\\\Orders_model"]
-			},
+			"column": "{
+                \"key\": \"order_date\",
+                \"contexts\": [\"\\\\Admin\\\\Models\\\\Orders_model\"]
+			}",
 			"label": "Date"
 		}],
 		"csv_columns": [{
 			"priority": 0,
-			"column": {
-				"key": "email",
-				"contexts": ["\\\\Admin\\\\Models\\\\Customers_model", "\\\\Admin\\\\Models\\\\Orders_model"]
-			},
+			"column": "{
+                \"key\": \"email\",
+                \"contexts\": [\"\\\\Admin\\\\Models\\\\Customers_model\", \"\\\\Admin\\\\Models\\\\Orders_model\"]
+			}",
 			"label": "Email"
 		}, {
 			"priority": 1,
 			"column": {
-				"key": "customer_name",
-				"contexts": ["\\\\Admin\\\\Models\\\\Customers_model", "\\\\Admin\\\\Models\\\\Orders_model"]
+                \"key\": \"customer_name\",
+                \"contexts\": [\"\\\\Admin\\\\Models\\\\Customers_model\", \"\\\\Admin\\\\Models\\\\Orders_model\"]
 			},
 			"label": "Name"
 		}, {
 			"priority": 2,
 			"column": {
-				"key": "order_total",
-				"contexts": ["\\\\Admin\\\\Models\\\\Orders_model"]
+                \"key\": \"order_total\",
+                \"contexts\": [\"\\\\Admin\\\\Models\\\\Orders_model\"]
 			},
 			"label": "Order Total"
 		}, {
 			"priority": 3,
-			"column": {
-				"key": "order_date",
-				"contexts": ["\\\\Admin\\\\Models\\\\Orders_model"]
-			},
+			"column": "{
+                \"key\": \"order_date\",
+                \"contexts\": [\"\\\\Admin\\\\Models\\\\Orders_model\"]
+			}",
 			"label": "Date"
 		}]
 	},
@@ -126,45 +126,45 @@ class ReportTables extends Migration
 		},
 		"list_columns": [{
 			"priority": 0,
-			"column": {
-				"key": "customer_name",
-				"contexts": ["\\\\Admin\\\\Models\\\\Customers_model", "\\\\Admin\\\\Models\\\\Orders_model"]
-			},
+			"column": "{
+                \"key\": \"customer_name\",
+                \"contexts\": [\"\\\\Admin\\\\Models\\\\Customers_model\", \"\\\\Admin\\\\Models\\\\Orders_model\"]
+			}",
 			"label": "Name"
 		}, {
 			"priority": 1,
-			"column": {
-				"key": "email",
-				"contexts": ["\\\\Admin\\\\Models\\\\Customers_model", "\\\\Admin\\\\Models\\\\Orders_model"]
-			},
+			"column": "{
+                \"key\": \"email\",
+                \"contexts\": [\"\\\\Admin\\\\Models\\\\Customers_model\", \"\\\\Admin\\\\Models\\\\Orders_model\"]
+			}",
 			"label": "Email"
 		}, {
 			"priority": 2,
-			"column": {
-				"key": "customer_address",
-				"contexts": ["\\\\Admin\\\\Models\\\\Customers_model"]
-			},
+			"column": "{
+                \"key\": \"customer_address\",
+                \"contexts\": [\"\\\\Admin\\\\Models\\\\Customers_model\"]
+			}",
 			"label": "Address"
 		}],
 		"csv_columns": [{
 			"priority": 0,
-			"column": {
-				"key": "customer_name",
-				"contexts": ["\\\\Admin\\\\Models\\\\Customers_model", "\\\\Admin\\\\Models\\\\Orders_model"]
-			},
+			"column": "{
+                \"key\": \"customer_name\",
+                \"contexts\": [\"\\\\Admin\\\\Models\\\\Customers_model\", \"\\\\Admin\\\\Models\\\\Orders_model\"]
+			}",
 			"label": "Name"
 		}, {
 			"priority": 1,
-			"column": {
-				"key": "email",
-				"contexts": ["\\\\Admin\\\\Models\\\\Customers_model", "\\\\Admin\\\\Models\\\\Orders_model"]
-			},
+			"column": "{
+                \"key\": \"email\",
+                \"contexts\": [\"\\\\Admin\\\\Models\\\\Customers_model\", \"\\\\Admin\\\\Models\\\\Orders_model\"]
+			}",
 			"label": "Email"
 		}, {
 			"priority": 2,
 			"column": {
-				"key": "customer_address",
-				"contexts": ["\\\\Admin\\\\Models\\\\Customers_model"]
+                \"key\": \"customer_address\",
+                \"contexts\": [\"\\\\Admin\\\\Models\\\\Customers_model\"]
 			},
 			"label": "Address"
 		}]
