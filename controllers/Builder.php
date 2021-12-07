@@ -166,7 +166,7 @@ class Builder extends \Admin\Classes\AdminController
             $csv_columns = [];
             $csv_headings = [];
             foreach ($model->csv_columns as $list_col) {
-                $col = json_decode($list_col['column'], true);
+                $col = (is_array($list_col['column']) ? $list_col['column'] : json_decode($list_col['column'], true));
                 $csv_columns[] = $col['key'];
                 $csv_headings[] = $list_col['label'];
             }
