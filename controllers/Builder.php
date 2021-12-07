@@ -189,7 +189,7 @@ class Builder extends \Admin\Classes\AdminController
         $list_columns = [];
         $sort_column = '';
         foreach ($model->list_columns as $list_col) {
-            $col = json_decode($list_col['column'], true);
+            $col = (is_array($list_col['column']) ? $list_col['column'] : json_decode($list_col['column'], true));
             $list_columns[$col['key']] = [
                 'title' => $list_col['label'],
             ];
