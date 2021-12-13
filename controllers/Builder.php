@@ -12,7 +12,7 @@ use Thoughtco\Reports\Models\QueryBuilder;
 use Thoughtco\Reports\Parser\QueryBuilderParser;
 
 class Builder extends \Admin\Classes\AdminController
-{    
+{
     public $implement = [
         'Admin\Actions\FormController',
         'Admin\Actions\ListController',
@@ -60,47 +60,49 @@ class Builder extends \Admin\Classes\AdminController
         parent::__construct();
         AdminMenu::setContext('reports', 'builder');
     }
-    
-    public function edit($context, $id) 
+
+    public function edit($context, $id)
     {
         parent::edit($context, $id);
         $this->addJs('~/extensions/thoughtco/reports/assets/js/editing.js', 'querybuilder-editing-js');
     }
-    
+
     public function view($context, $id)
     {
         if (!($model = QueryBuilder::find($id)))
-            abort(404);  
-            
+            abort(404);
+
         // some fields require extending the where
-        Event::listen('thoughtco.reports.fieldToQuery', function ($controller, $query, $field, $operator, $value, $condition) 
+        Event::listen('thoughtco.reports.fieldToQuery', function ($controller, $query, $field, $operator, $value, $condition)
         {
             // we only care about certain models by default - this allows others to extend
             if (!in_array(get_class($query->getModel()), ['Admin\Models\Orders_model', 'Admin\Models\Customers_model']))
                 return;
-            
+
+            $tableName = $query->getModel()->getTable();
+
             if ($field == 'customers.orderdate') {
                 return $query->whereHas('orders', function($query) {
                     return $query->where('orders.order_date', $operator, $value);
-                }, $condition);                
+                }, $condition);
             }
-            
+
             if ($field == 'date_added_relative') {
                 $value = strtotime('-'.$value.' days');
-                return $query->where('date_added', $operator, date('Y-m-d H:i:s', $value), $condition);
+                return $query->where($tableName.'.date_added', $operator, date('Y-m-d H:i:s', $value), $condition);
             }
-            
+
             if ($field == 'order_date_relative') {
                 $value = strtotime('-'.$value.' days');
-                return $query->where('order_date', $operator, date('Y-m-d', $value), $condition);
+                return $query->where('orders.order_date', $operator, date('Y-m-d', $value), $condition);
             }
-            
+
             if ($field == 'orders.categories') {
-                
+
                 $value = \Admin\Models\Menus_model::whereHas('categories', function($query) use ($value) {
                     $query->where('categories.category_id', $value);
                 })->pluck('menu_id');
-                               
+
                 $query->join('order_menus', 'order_menus.order_id', '=', 'orders.order_id');
                 return $query->where(function($query) use ($operator, $value) {
                     foreach ($value as $val)
@@ -108,61 +110,66 @@ class Builder extends \Admin\Classes\AdminController
                 }, $condition);
 
             }
-            
+
             if ($field == 'orders.customer_group') {
                 return $query->whereHas('customer', function($query) {
                     return $query->where('customer_group_id', $operator, $value);
                 }, $condition);
             }
-            
+
             if ($field == 'orders.customer_name' || $field == 'customers.name') {
-                return $query->whereRaw('CONCAT(first_name, " ", last_name) '.$operator.' ?', [$value], $condition);    
+                return $query->whereRaw('CONCAT(first_name, " ", last_name) '.$operator.' ?', [$value], $condition);
             }
-            
+
             if ($field == 'orders.delivery_address') {
                 return $query->whereHas('address', function($query) {
                     return $query->whereRaw('CONCAT(address_1, " ", address_2, " ", city, " ", state, " ", postcode) '.$operator.' ?', [$value], $condition);
                 }, $condition);
-            }            
-            
+            }
+
             if ($field == 'orders.menus') {
                 $query->join('order_menus', 'order_menus.order_id', '=', 'orders.order_id');
                 return $query->where('order_menus.menu_id', $operator, $value, $condition);
             }
-            
+
             // catch-all
+            if (stripos($field, '.') === false)
+                $field = $tableName.'.'.$field;
+
             return $query->where($field, $operator, $value, $condition);
-            
+
         });
-        
+
         // some require extending the overall query
         Event::listen('thoughtco.reports.extendQuery', function($controller, $query, $modelName) {
-                        
+
             // we only care about certain models by default - this allows others to extend
             if (!in_array($modelName, ['\Admin\Models\Orders_model', '\Admin\Models\Customers_model']))
                 return;
-                
-            $query->selectRaw('*, CONCAT(first_name, " ", last_name) as customer_name');
-            
+
+            $tableName = $query->getModel()->getTable();
+
+            $query->selectRaw($tableName.'.*, CONCAT(first_name, " ", last_name) as customer_name');
+
             if ($modelName == '\Admin\Models\Customers_model') {
-                
+
                 $query->leftJoin('addresses', 'addresses.address_id', 'customers.address_id');
                 $query->selectRaw('CONCAT(address_1, " ", address_2, " ", city, " ", state, " ", postcode) as customer_address');
-                
+
             }
-            
+
         });
-         
-        // csv export   
+
+        // csv export
         if ($csv = request()->input('csv')) {
-            
+
             $klass = new $model->builderjson['model']();
             $parser = new QueryBuilderParser();
-            
+
             $table = $klass->newQuery();
             $query = $parser->parse(json_encode($model->builderjson['rules']), $table);
             $data = $query->get();
-                
+
             $csv_columns = [];
             $csv_headings = [];
             foreach ($model->csv_columns as $list_col) {
@@ -170,22 +177,22 @@ class Builder extends \Admin\Classes\AdminController
                 $csv_columns[] = $col['key'];
                 $csv_headings[] = $list_col['label'];
             }
-                        
-            $data = $data->map(function($row) use ($csv_columns) { 
+
+            $data = $data->map(function($row) use ($csv_columns) {
                 return $row->only($csv_columns);
             })->sortBy($csv_columns[0]);
-            
+
             $writer = Writer::createFromString();
             $writer->insertOne($csv_headings);
             $writer->insertAll(new \ArrayIterator($data->toArray()));
-            
+
             echo $writer->getContent();
             exit();
-        
+
         };
-            
+
         Template::setTitle($model->title);
-        
+
         $list_columns = [];
         $sort_column = '';
         foreach ($model->list_columns as $list_col) {
@@ -196,7 +203,7 @@ class Builder extends \Admin\Classes\AdminController
             if ($sort_column == '')
                 $sort_column = $col['key'];
         }
-                        
+
         $this->vars['datatable'] = $this->makeFormWidget('Thoughtco\Reports\FormWidgets\ReportsTable', (object)[
             'fieldName' => 'report',
             'valueFrom' => '',
@@ -210,8 +217,8 @@ class Builder extends \Admin\Classes\AdminController
             'searchableFields' => array_keys($list_columns),
             'showRefreshButton' => TRUE,
         ]);
-        
+
         return $this->makeView('builder/view');
-        
+
     }
 }
