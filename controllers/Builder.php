@@ -75,11 +75,15 @@ class Builder extends \Admin\Classes\AdminController
         // some fields require extending the where
         Event::listen('thoughtco.reports.fieldToQuery', function ($controller, $query, $field, $operator, $value, $condition)
         {
+            $model = $query->getModel();
+
             // we only care about certain models by default - this allows others to extend
-            if (!in_array(get_class($query->getModel()), ['Admin\Models\Orders_model', 'Admin\Models\Customers_model']))
+            if (!in_array(get_class($model), ['Admin\Models\Orders_model', 'Admin\Models\Customers_model']))
                 return;
 
-            $tableName = $query->getModel()->getTable();
+            $tableName = $model->getConnection()->getTablePrefix().$model->getTable();
+
+            $existingJoins = collect($query->getQuery()->joins)->pluck('table');
 
             if ($field == 'customers.orderdate') {
                 return $query->whereHas('orders', function($query) {
@@ -103,7 +107,9 @@ class Builder extends \Admin\Classes\AdminController
                     $query->where('categories.category_id', $value);
                 })->pluck('menu_id');
 
-                $query->join('order_menus', 'order_menus.order_id', '=', 'orders.order_id');
+                if (! $existingJoins->contains('order_menus'))
+                    $query->join('order_menus', 'order_menus.order_id', '=', 'orders.order_id');
+
                 return $query->where(function($query) use ($operator, $value) {
                     foreach ($value as $val)
                         $query->orWhere('order_menus.menu_id', $operator, $val);
@@ -128,7 +134,10 @@ class Builder extends \Admin\Classes\AdminController
             }
 
             if ($field == 'orders.menus') {
-                $query->join('order_menus', 'order_menus.order_id', '=', 'orders.order_id');
+
+                if (! $existingJoins->contains('order_menus'))
+                    $query->join('order_menus', 'order_menus.order_id', '=', 'orders.order_id');
+
                 return $query->where('order_menus.menu_id', $operator, $value, $condition);
             }
 
@@ -147,11 +156,18 @@ class Builder extends \Admin\Classes\AdminController
             if (!in_array($modelName, ['\Admin\Models\Orders_model', '\Admin\Models\Customers_model']))
                 return;
 
-            $tableName = $query->getModel()->getTable();
+            $model = $query->getModel();
+            $tableName = $model->getConnection()->getTablePrefix().$model->getTable();
+
+            $existingJoins = collect($query->getQuery()->joins)->pluck('table');
 
             $query->selectRaw($tableName.'.*, CONCAT(first_name, " ", last_name) as customer_name');
 
             if ($modelName == '\Admin\Models\Customers_model') {
+
+                if (! $existingJoins->contains('order_menus'))
+                    $query->join('order_menus', 'order_menus.order_id', '=', 'orders.order_id');
+
 
                 $query->leftJoin('addresses', 'addresses.address_id', 'customers.address_id');
                 $query->selectRaw('CONCAT(address_1, " ", address_2, " ", city, " ", state, " ", postcode) as customer_address');
