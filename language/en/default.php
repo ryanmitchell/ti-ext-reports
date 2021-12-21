@@ -40,6 +40,13 @@ return [
         'label_orders_type' => 'Type',
         'label_orders_address' => 'Address',
 
+        'label_orders_date_relative' => 'Order Date Relative',
+        'value_date_relative_7' => '7 days',
+        'value_date_relative_14' => '14 days',
+        'value_date_relative_30' => '30 days',
+        'value_date_relative_90' => '90 days',
+        'value_date_relative_365' => '365 days',
+
         'text_title' => 'Query Builder',
     ],
 

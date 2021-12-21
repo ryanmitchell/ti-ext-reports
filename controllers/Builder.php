@@ -143,7 +143,7 @@ class Builder extends \Admin\Classes\AdminController
 
             // catch-all
             if (stripos($field, '.') === false)
-                $field = $tableName.'.'.$field;
+                $field = $model->getTable().'.'.$field;
 
             return $query->where($field, $operator, $value, $condition);
 
@@ -201,6 +201,15 @@ class Builder extends \Admin\Classes\AdminController
             $writer = Writer::createFromString();
             $writer->insertOne($csv_headings);
             $writer->insertAll(new \ArrayIterator($data->toArray()));
+
+            // this will set the file to download properly for most use-cases, but there is a known limitation with Excel on macOS (see https://csv.thephpleague.com/9.0/interoperability/encoding/)
+            header('Content-Encoding: UTF-8');
+            header('Content-Type: application/csv; charset=UTF-8');
+            header('Content-Disposition: attachment; filename='.str_replace(' ', '_', $model->title).'.csv');
+            header('Pragma: no-cache');
+
+            $writer->setOutputBOM(Writer::BOM_UTF8);
+            $writer->addStreamFilter('convert.iconv.ISO-8859-15/UTF-8');
 
             echo $writer->getContent();
             exit();
