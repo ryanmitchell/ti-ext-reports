@@ -184,6 +184,9 @@ class Builder extends \Admin\Classes\AdminController
 
             $table = $klass->newQuery();
             $query = $parser->parse(json_encode($model->builderjson['rules']), $table);
+
+            $this->fireSystemEvent('thoughtco.reports.extendQuery', [$query, $model->builderjson['model']] );
+
             $data = $query->get();
 
             $csv_columns = [];
