@@ -1,5 +1,5 @@
 {
-  "name": "thoughtco/reports",
+  "name": "thoughtco/ti-ext-reports",
   "license": "MIT",
   "description": "Provides reporting on your restaurant, such as daily sales, quantity of items sold, top customers, top items.",
   "type": "tastyigniter-extension",
