@@ -1,8 +1,29 @@
 {
   "name": "thoughtco/reports",
+  "license": "MIT",
+  "description": "Provides reporting on your restaurant, such as daily sales, quantity of items sold, top customers, top items.",
   "type": "tastyigniter-extension",
   "keywords": ["tastyigniter", "reports"],
   "require": {
     "league/csv": "^9.0"
-  }
+  },
+   "authors": [
+     {
+       "name": "Ryan Mitchell",
+       "email": "ryan@thoughtcollective.com"
+     }
+   ],
+   "extra": {
+     "tastyigniter-extension": {
+       "code": "thoughtco.reports",
+       "name": "Reports",
+       "icon": {
+         "class": "fa fa-chart-pie",
+         "color": "#FFF",
+         "backgroundColor": "#111"
+       },
+       "homepage": "https://github.com/ryanmitchell/ti-ext-reports",
+       "require": {}
+     }
+   }
 }
