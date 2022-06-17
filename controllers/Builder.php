@@ -225,7 +225,7 @@ class Builder extends \Admin\Classes\AdminController
         $sort_column = '';
         foreach ($model->list_columns as $list_col) {
             $col = json_decode($list_col['column'], true);
-            $list_columns[$col['key']] = [
+            $col['key'] = [
                 'title' => $list_col['label'],
             ];
             if ($sort_column == '')
