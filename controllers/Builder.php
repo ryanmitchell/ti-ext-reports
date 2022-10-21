@@ -78,8 +78,6 @@ class Builder extends \Admin\Classes\AdminController
             if (!in_array(get_class($model), [\Admin\Models\Orders_model::class, \Admin\Models\Customers_model::class]))
                 return;
 
-            $tableName = $model->getConnection()->getTablePrefix().$model->getTable();
-
             $existingJoins = collect($query->getQuery()->joins)->pluck('table');
 
             if ($field == 'customers.orderdate') {
@@ -90,7 +88,8 @@ class Builder extends \Admin\Classes\AdminController
 
             if ($field == 'date_added_relative') {
                 $value = strtotime('-'.$value.' days');
-                return $query->where($tableName.'.date_added', $operator, date('Y-m-d H:i:s', $value), $condition);
+
+                return $query->where($model->getTable().'.created_at', $operator, date('Y-m-d H:i:s', $value), $condition);
             }
 
             if ($field == 'order_date_relative') {
@@ -107,14 +106,14 @@ class Builder extends \Admin\Classes\AdminController
                 if (!$existingJoins->contains('order_menus'))
                     $query->join('order_menus', 'order_menus.order_id', '=', 'orders.order_id');
 
-                return $query->where(function($query) use ($operator, $value) {
+                return $query->where(function ($query) use ($operator, $value) {
                     foreach ($value as $val)
                         $query->orWhere('order_menus.menu_id', $operator, $val);
                 }, $condition);
             }
 
             if ($field == 'orders.customer_group') {
-                return $query->whereHas('customer', function($query) {
+                return $query->whereHas('customer', function ($query) use ($operator, $value) {
                     return $query->where('customer_group_id', $operator, $value);
                 }, $condition);
             }
@@ -124,7 +123,7 @@ class Builder extends \Admin\Classes\AdminController
             }
 
             if ($field == 'orders.delivery_address') {
-                return $query->whereHas('address', function($query) {
+                return $query->whereHas('address', function ($query) use ($operator, $value, $condition) {
                     return $query->whereRaw('CONCAT(address_1, " ", address_2, " ", city, " ", state, " ", postcode) '.$operator.' ?', [$value], $condition);
                 }, $condition);
             }
