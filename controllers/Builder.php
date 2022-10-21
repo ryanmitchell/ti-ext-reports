@@ -201,7 +201,7 @@ class Builder extends \Admin\Classes\AdminController
             $writer->setOutputBOM(Writer::BOM_UTF8);
             $writer->addStreamFilter('convert.iconv.ISO-8859-15/UTF-8');
 
-            echo $writer->getContent();
+            echo $writer->toString();
             exit();
         }
 
