@@ -28,8 +28,10 @@ return [
         'label_customer_email' => 'Email',
         'label_customer_group' => 'Customer group',
         'label_customer_joined' => 'Joined date',
+        'label_customer_joined_relative' => 'Joined date relative',
         'label_customer_name' => 'Name',
         'label_customer_orderdate' => 'Order date',
+        'label_orders_date_relative' => 'Order Date Relative',
 
         'label_location' => 'Location',
 
@@ -40,7 +42,6 @@ return [
         'label_orders_type' => 'Type',
         'label_orders_address' => 'Address',
 
-        'label_orders_date_relative' => 'Order Date Relative',
         'value_date_relative_7' => '7 days',
         'value_date_relative_14' => '14 days',
         'value_date_relative_30' => '30 days',

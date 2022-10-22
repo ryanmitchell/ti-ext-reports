@@ -2,8 +2,8 @@
 
 namespace Thoughtco\Reports\FormWidgets;
 
-use AdminLocation;
 use Admin\Classes\BaseFormWidget;
+use AdminLocation;
 
 class QueryBuilder extends BaseFormWidget
 {
@@ -37,14 +37,13 @@ class QueryBuilder extends BaseFormWidget
     public function loadAssets()
     {
         $this->addJs('~/app/system/assets/ui/js/vendor/moment.min.js', 'moment-js');
-        $this->addCss('~/app/admin/formwidgets/datepicker/assets/vendor/datepicker/bootstrap-datepicker.min.css', 'bootstrap-datepicker-css');
         $this->addJs('~/app/admin/formwidgets/datepicker/assets/vendor/datepicker/bootstrap-datepicker.min.js', 'bootstrap-datepicker-js');
-        $this->addCss('~/app/admin/formwidgets/datepicker/assets/css/datepicker.css', 'datepicker-css');
-
-        $this->addJs('https://cdn.jsdelivr.net/npm/jQuery-QueryBuilder@2.6.0/dist/js/query-builder.standalone.js', 'jquery-builder-js');
-        $this->addCss('css/querybuilder.css', 'jquery-builder-css');
-
+        $this->addJs('js/query-builder.standalone.js', 'query-builder.standalone-js');
         $this->addJs('js/querybuilder.js', 'querybuilder-js');
+
+        $this->addCss('~/app/admin/formwidgets/datepicker/assets/vendor/datepicker/bootstrap-datepicker.min.css', 'bootstrap-datepicker-css');
+        $this->addCss('css/querybuilder.css', 'jquery-builder-css');
+        $this->addCss('~/app/admin/formwidgets/datepicker/assets/css/datepicker.css', 'datepicker-css');
     }
 
     public function getSaveValue($value)
