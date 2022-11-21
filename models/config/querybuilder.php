@@ -276,7 +276,9 @@ return [
                                 'label' => lang('thoughtco.reports::default.qb.label_orders_type'),
                                 'type' => 'string',
                                 'input' => 'select',
-                                'values' => ['Admin\Models\Locations_model', 'getOrderTypeOptions'],
+                                'values' => \Admin\Models\Locations_model::getOrderTypeOptions()->mapWithKeys(function ($value, $key) {
+                                    return [$key => lang($value)];
+                                }),
                             ],
                             [
                                 'id' => 'orders.delivery_address',
