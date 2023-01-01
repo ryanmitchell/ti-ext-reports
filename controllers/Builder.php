@@ -179,7 +179,7 @@ class Builder extends \Admin\Classes\AdminController
             $csv_columns = [];
             $csv_headings = [];
             foreach ($model->csv_columns as $list_col) {
-                $col = $list_col['column'];
+                $col = is_string($list_col['column']) ? json_decode($list_col['column'], true) : $list_col['column'];
                 $csv_columns[] = $col['key'];
                 $csv_headings[] = $list_col['label'];
             }
@@ -210,7 +210,7 @@ class Builder extends \Admin\Classes\AdminController
         $list_columns = [];
         $sort_column = '';
         foreach ($model->list_columns as $list_col) {
-            $col = json_decode($list_col['column'], true);
+            $col = is_string($list_col['column']) ? json_decode($list_col['column'], true) : $list_col['column'];
             $list_columns[$col['key']] = [
                 'title' => $list_col['label'],
             ];
