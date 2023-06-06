@@ -25,7 +25,7 @@
 
         this.$inputElement = this.$el.find('textarea');
 
-        this.$value = { model: '' };
+        this.$value = {model: ''};
         if (this.$el.data('value')) {
             this.$value = this.$el.data('value');
         }
@@ -37,7 +37,7 @@
 
     }
 
-    tastyQueryBuilder.prototype.makeBuilder = function() {
+    tastyQueryBuilder.prototype.makeBuilder = function () {
 
         let opts = JSON.parse(JSON.stringify(this.options));
         opts.filters = opts.filters[this.$selectElement[0].value].filters;
@@ -47,7 +47,7 @@
         var $builderElement;
         this.$builderElement = $builderElement = this.$el.find('.querybuilder');
 
-        this.$builderElement.on('afterUpdateRuleValue.queryBuilder', function(e, rule) {
+        this.$builderElement.on('afterUpdateRuleValue.queryBuilder', function (e, rule) {
             if (rule.filter.plugin === 'datepicker') {
                 rule.$el.find('.rule-value-container input').datepicker('update');
             }
@@ -59,8 +59,8 @@
         var builderElement = this.$builderElement[0].queryBuilder;
 
         this.$ignoreNextEvent = false;
-        builderElement.on('beforeDestroy', $.proxy(function(){
-           this.$ignoreNextEvent = true;
+        builderElement.on('beforeDestroy', $.proxy(function () {
+            this.$ignoreNextEvent = true;
         }, this));
 
         builderElement.$el.removeClass('form-inline').addClass('form-block');
@@ -70,7 +70,7 @@
 
     }
 
-    tastyQueryBuilder.prototype.onRulesChanged = function() {
+    tastyQueryBuilder.prototype.onRulesChanged = function () {
         let val = {
             model: this.$selectElement.val(),
             rules: (this.$ignoreNextEvent ? [] : this.$builderElement.queryBuilder('getRules'))
@@ -78,7 +78,7 @@
         this.$inputElement.val(JSON.stringify(val));
     }
 
-    tastyQueryBuilder.prototype.onOptionChange = function() {
+    tastyQueryBuilder.prototype.onOptionChange = function () {
         this.$builderElement[0].queryBuilder.destroy();
         this.makeBuilder();
     }
@@ -87,7 +87,58 @@
     // ============================
 
     tastyQueryBuilder.DEFAULTS = {
-        filters: []
+        filters: [],
+        templates: {
+            group: '\
+<div id="{{= it.group_id }}" class="rules-group-container"> \
+  <div class="rules-group-header"> \
+    <div class="btn-group pull-right group-actions"> \
+      <button type="button" class="btn btn-link fw-bold text-decoration-none text-success" data-add="rule"> \
+        <i class="{{= it.icons.add_rule }}"></i> {{= it.translate("add_rule") }} \
+      </button> \
+      {{? it.settings.allow_groups===-1 || it.settings.allow_groups>=it.level }} \
+        <button type="button" class="btn btn-link fw-bold text-decoration-none text-success" data-add="group"> \
+          <i class="{{= it.icons.add_group }}"></i> {{= it.translate("add_group") }} \
+        </button> \
+      {{?}} \
+      {{? it.level>1 }} \
+        <button type="button" class="btn btn-link fw-bold text-decoration-none text-danger" data-delete="group"> \
+          <i class="{{= it.icons.remove_group }}"></i> {{= it.translate("delete_group") }} \
+        </button> \
+      {{?}} \
+    </div> \
+    <div class="btn-group btn-group-sm group-conditions"> \
+      {{~ it.conditions: condition }} \
+        <label class="btn btn-outline-primary"> \
+          <input type="radio" name="{{= it.group_id }}_cond" value="{{= condition }}"> {{= it.translate("conditions", condition) }} \
+        </label> \
+      {{~}} \
+    </div> \
+    {{? it.settings.display_errors }} \
+      <div class="error-container"><i class="{{= it.icons.error }}"></i></div> \
+    {{?}} \
+  </div> \
+  <div class=rules-group-body> \
+    <div class=rules-list></div> \
+  </div> \
+</div>',
+            rule: '\
+<div id="{{= it.rule_id }}" class="rule-container"> \
+  <div class="rule-header"> \
+    <div class="btn-group pull-right rule-actions"> \
+      <button type="button" class="btn btn-link fw-bold text-decoration-none text-danger" data-delete="rule"> \
+        <i class="{{= it.icons.remove_rule }}"></i> {{= it.translate("delete_rule") }} \
+      </button> \
+    </div> \
+  </div> \
+  {{? it.settings.display_errors }} \
+    <div class="error-container"><i class="{{= it.icons.error }}"></i></div> \
+  {{?}} \
+  <div class="rule-filter-container"></div> \
+  <div class="rule-operator-container"></div> \
+  <div class="rule-value-container"></div> \
+</div>',
+        },
     }
 
     var old = $.fn.tastyQueryBuilder

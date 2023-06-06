@@ -30,7 +30,7 @@ class Lists extends BaseDashboardWidget
         return [
             'context' => [
                 'label' => 'admin::lang.dashboard.text_context',
-                'default' => 'sale',
+                'default' => 'top_customers',
                 'type' => 'select',
                 'options' => $this->getContextOptions(),
             ],
@@ -47,7 +47,7 @@ class Lists extends BaseDashboardWidget
             'bottom_customers' => [
                 'label' => 'lang:thoughtco.reports::default.text_bottom_customers',
                 'icon' => ' fa fa-users',
-            ],            
+            ],
             'top_items' => [
                 'label' => 'lang:thoughtco.reports::default.text_best_selling_items',
                 'icon' => ' fa fa-shopping-bag',
@@ -55,7 +55,7 @@ class Lists extends BaseDashboardWidget
             'bottom_items' => [
                 'label' => 'lang:thoughtco.reports::default.text_worst_selling_items',
                 'icon' => ' fa fa-shopping-bag',
-            ],                          
+            ],
         ];
     }
 
@@ -91,6 +91,8 @@ class Lists extends BaseDashboardWidget
 
     protected function callContextCountMethod($context)
     {
-        return ReportsCache::get($context, []);
+        return ReportsCache::getValue($context,
+            $this->getStartDate(), $this->getEndDate()
+        );
     }
 }
