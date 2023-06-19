@@ -158,22 +158,9 @@ class Extension extends BaseExtension
                 'icon' => 'fa-chart-pie',
                 'title' => lang('lang:thoughtco.reports::default.text_title'),
                 'priority' => 35,
-                'child' => [
-                    'dashboard' => [
-                        'priority' => 5,
-                        'class' => 'pages',
-                        'href' => admin_url('thoughtco/reports/dashboard'),
-                        'title' => lang('lang:thoughtco.reports::default.text_dashboard_title'),
-                        'permission' => 'Thoughtco.Reports.View',
-                    ],
-                    'builder' => [
-                        'priority' => 5,
-                        'class' => 'pages',
-                        'href' => admin_url('thoughtco/reports/builder'),
-                        'title' => lang('lang:thoughtco.reports::default.text_builder_title'),
-                        'permission' => 'Thoughtco.Reports.View',
-                    ],
-                ],
+                'class' => 'pages',
+                'href' => admin_url('thoughtco/reports/builder'),
+                'permission' => 'Thoughtco.Reports.View',
             ],
         ];
     }

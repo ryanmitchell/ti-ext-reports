@@ -33,6 +33,7 @@ class Lists extends BaseDashboardWidget
                 'default' => 'top_customers',
                 'type' => 'select',
                 'options' => $this->getContextOptions(),
+                'validationRule' => 'required|alpha_dash',
             ],
         ];
     }
