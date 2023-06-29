@@ -51,12 +51,12 @@ return [
         'text_title' => 'Query Builder',
     ],
 
-    'text_builder_title' => 'Builder',
+    'text_builder_title' => 'Query Builder',
     'text_dashboard_title' => 'Dashboard',
     'text_title' => 'Reports',
+    'text_list_widget_title' => 'Lists widget',
 
     'text_builder_empty' => 'No reports defined',
-    'text_builder_title' => 'Query Builder',
     'text_builder_form' => 'Build Query',
 
     'text_total_sales' => 'Total Sales',
